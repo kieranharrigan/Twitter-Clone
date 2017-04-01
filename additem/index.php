@@ -1,0 +1,82 @@
+<?php
+session_start();
+
+$fields = json_decode(file_get_contents('php://input'), true);
+$content = $fields['content'];
+
+if($content !== NULL && $_SESSION['username'] !== NULL) :
+    if(false) {
+    }
+//    if(strlen($content) > 140) {
+//        $phrase = 'ERROR';
+//    }
+    else {
+$cluster = Cassandra::cluster()->build();
+$keyspace = 'twitter';
+$session = $cluster->connect($keyspace);
+$statement = new Cassandra\SimpleStatement(
+    "SELECT COUNT(*) FROM twitter.tweets"
+);
+$future = $session->executeAsync($statement);
+$result = $future->get();
+$id = md5(uniqid($_SESSION['username'], true));
+
+
+//$results_file = fopen('results.txt', 'a');
+//fwrite($results_file, strval($id) . ': "' . $content . '"' . PHP_EOL);
+//fclose($results_file);
+
+$batch     = new Cassandra\BatchStatement(Cassandra::BATCH_LOGGED);
+
+$escape = str_replace("'", "''", $content);
+
+$insertByTime = new Cassandra\SimpleStatement(
+    "INSERT INTO twitter.tweets (id,content,sort,timestamp,username) VALUES ('" . strval($id) . "','" . $escape . "',1," . time() . ",'" . strtolower($_SESSION['username']) . "')"
+);
+
+$insertById = new Cassandra\SimpleStatement(
+    "INSERT INTO twitter.tweetsbyid (id,content,sort,timestamp,username) VALUES ('" . strval($id) . "','" . $escape . "',1," . time() . ",'" . strtolower($_SESSION['username']) . "')"
+);
+
+$batch->add($insertByTime);
+$batch->add($insertById);
+
+$session->executeAsync($batch);
+$session->closeAsync();            
+            $phrase = 'OK';
+}
+    $response = array("status" => $phrase);
+
+if(strcmp($phrase, 'OK') === 0) {
+    $response['id'] = strval($id);
+}
+	$json = json_encode($response);
+
+	echo $json;
+elseif($_SESSION['username'] === NULL):
+    $response = array("status" => "error");
+    $response['error'] = 'You must be logged in before you can compose tweets.';
+    $json = json_encode($response);
+    echo $json;
+else :
+?>
+<html>
+<head>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/additem/additem.js"></script>
+</head>
+
+<body>
+    <form id="input" oninput="updateCount();" onsubmit="event.preventDefault(); passToAdd();" autocomplete="off">
+        <textarea id="tweet" type="text" name="content" maxlength="140" rows="6" cols="50" style="resize:none" autofocus></textarea><br>
+        Characters left: <span id="rem">140</span><br>
+        <input type="submit" value="submit">
+    </form>
+
+    <div id="result"></div>
+</body>
+</html>
+<?php
+endif;
+?>
+
