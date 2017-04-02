@@ -9,7 +9,7 @@ if ($follow === NULL) {
 	$follow = true;
 }
 
-function doFollow() {
+function doFollow($tofollow, $session) {
 	$tofollow = strtolower($tofollow);
 
 	$statement = new Cassandra\SimpleStatement(
@@ -73,7 +73,7 @@ function doFollow() {
 	return $response;
 }
 
-function doUnfollow() {
+function doUnfollow($tofollow, $session) {
 	$tounfollow = strtolower($tofollow);
 
 	$statement = new Cassandra\SimpleStatement(
@@ -124,7 +124,7 @@ function doUnfollow() {
 				"UPDATE users SET following='" . strval(json_encode($following_json)) . "' WHERE username='" . $_SESSION['username'] . "' AND email='" . $email . "'"
 			);
 			$them = new Cassandra\SimpleStatement(
-				"UPDATE users SET followers='" . strval(json_encode($followers_json)) . "' WHERE username='" . $tofollow . "' AND email='" . $tofollow_email . "'"
+				"UPDATE users SET followers='" . strval(json_encode($followers_json)) . "' WHERE username='" . $tounfollow . "' AND email='" . $tounfollow_email . "'"
 			);
 
 			$batch->add($me);
@@ -146,9 +146,9 @@ if ($tofollow !== NULL && $_SESSION['username'] !== NULL):
 	$session = $cluster->connect($keyspace);
 
 	if ($follow) {
-		$response = doFollow();
+		$response = doFollow($tofollow, $session);
 	} else {
-		$response = doUnfollow();
+		$response = doUnfollow($tofollow, $session);
 	}
 
 	$session->closeAsync();
