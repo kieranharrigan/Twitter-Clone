@@ -28,6 +28,8 @@ $future = $session->executeAsync($statement);
 $result = $future->get();
 $row = $result->first();
 
+$session->closeAsync();
+
 if ($row === NULL) {
 	$phrase = 'ERROR';
 	$response = array("status" => $phrase);
