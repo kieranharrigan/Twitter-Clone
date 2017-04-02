@@ -35,7 +35,7 @@ if ($row === NULL) {
 	$response['error'] = $err;
 } else {
 	$following = json_decode($row['following'], true)['following'];
-    $limited = array_slice($following, 0, $limit)
+	$limited = array_slice($following, 0, $limit);
 
 	$phrase = 'OK';
 	$response = array("status" => $phrase);
