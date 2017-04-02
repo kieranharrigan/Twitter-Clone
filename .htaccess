@@ -14,8 +14,4 @@ RewriteRule ^user/([a-zA-Z0-9]+)/?$ /users?username=$1
 RewriteRule ^user/([a-zA-Z0-9]+)/followers/?$ /users/followers?username=$1 [L,QSA]
 RewriteRule ^user/([a-zA-Z0-9]+)/following/?$ /users/following?username=$1 [L,QSA]
 
-#RewriteCond %{QUERY_STRING} ^limit=([0-9]+)$
-#RewriteRule ^user/([a-zA-Z0-9]+)/followers/?$ /users/followers?limit=$1&username=$2
-
-
 Options -Indexes
