@@ -35,10 +35,11 @@ if ($row === NULL) {
 	$response['error'] = $err;
 } else {
 	$followers = json_decode($row['followers'], true)['followers'];
+    $limited = array_slice($followers, 0, $limit)
 
 	$phrase = 'OK';
 	$response = array("status" => $phrase);
-	$response['users'] = $followers;
+	$response['users'] = $limited;
 }
 
 $json = json_encode($response);
