@@ -10,8 +10,12 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^api/(.*)$ api/index.php [L]
 
 RewriteRule ^item/([a-zA-Z0-9]+)/?$ /item?id=$1
-RewriteRule ^user/([a-zA-Z0-9]+)/?$ /user?username=$1
-RewriteRule ^user/([a-zA-Z0-9]+)/followers/?$ /user/following?username=$1
-RewriteRule ^user/([a-zA-Z0-9]+)/following/?$ /user/followers?username=$1
+RewriteRule ^user/([a-zA-Z0-9]+)/?$ /users?username=$1
+RewriteRule ^user/([a-zA-Z0-9]+)/followers/?$ /users/followers?username=$1 [L,QSA]
+RewriteRule ^user/([a-zA-Z0-9]+)/following/?$ /users/following?username=$1 [L,QSA]
+
+#RewriteCond %{QUERY_STRING} ^limit=([0-9]+)$
+#RewriteRule ^user/([a-zA-Z0-9]+)/followers/?$ /users/followers?limit=$1&username=$2
+
 
 Options -Indexes
