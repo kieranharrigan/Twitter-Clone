@@ -19,8 +19,8 @@
 				data: json,
 				dataType: "json",
 				success: function(reply) {
-					document.getElementById("result").innerHTML += reply.phrase + "<br>";
-				}  
+					document.write(reply);
+				}
 			});
 		}
 
