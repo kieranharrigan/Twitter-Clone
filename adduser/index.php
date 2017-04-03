@@ -25,11 +25,11 @@ if ($username !== NULL && $password !== NULL && $email !== NULL):
 			$batch = new Cassandra\BatchStatement(Cassandra::BATCH_LOGGED);
 
 			$statement = new Cassandra\SimpleStatement(
-				"INSERT INTO twitter.users (username,password,disabled,email,key,followers,following) VALUES ('" . strtolower($username) . "','" . $password . "',true,'" . $email . "','" . $key . "','{\"followers\":[]}','{\"following\":[]}')"
+				"INSERT INTO twitter.users (username,password,disabled,email,key,followers,following) VALUES ('" . strtolower($username) . "','" . $password . "',true,'" . strtolower($email) . "','" . $key . "','{\"followers\":[]}','{\"following\":[]}')"
 			);
 
 			$emails = new Cassandra\SimpleStatement(
-				"INSERT INTO twitter.emails (username,password,disabled,email,key) VALUES ('" . strtolower($username) . "','" . $password . "',true,'" . $email . "','" . $key . "')"
+				"INSERT INTO twitter.emails (username,password,disabled,email,key) VALUES ('" . strtolower($username) . "','" . $password . "',true,'" . strtolower($email) . "','" . $key . "')"
 			);
 
 			$batch->add($emails);
