@@ -14,11 +14,7 @@ else {
 		$cluster = Cassandra::cluster()->build();
 		$keyspace = 'twitter';
 		$session = $cluster->connect($keyspace);
-		$statement = new Cassandra\SimpleStatement(
-			"SELECT COUNT(*) FROM twitter.tweets"
-		);
-		$future = $session->executeAsync($statement);
-		$result = $future->get();
+
 		$id = md5(uniqid($_SESSION['username'], true));
 
 //$results_file = fopen('results.txt', 'a');
