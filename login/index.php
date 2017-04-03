@@ -11,8 +11,7 @@ if ($username !== NULL && $password !== NULL):
 	$statement = new Cassandra\SimpleStatement(
 		"SELECT * FROM users WHERE username='" . strtolower($username) . "'"
 	);
-	$future = $session->execute($statement);
-	$result = $future->get();
+	$result = $session->execute($statement);
 	$row = $result->first();
 
 	if ($row !== NULL) {
