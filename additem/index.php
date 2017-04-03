@@ -4,61 +4,60 @@ session_start();
 $fields = json_decode(file_get_contents('php://input'), true);
 $content = $fields['content'];
 
-if($content !== NULL && $_SESSION['username'] !== NULL) :
-    if(false) {
-    }
+if ($content !== NULL && $_SESSION['username'] !== NULL):
+	if (false) {
+	}
 //    if(strlen($content) > 140) {
-//        $phrase = 'ERROR';
-//    }
-    else {
-$cluster = Cassandra::cluster()->build();
-$keyspace = 'twitter';
-$session = $cluster->connect($keyspace);
-$statement = new Cassandra\SimpleStatement(
-    "SELECT COUNT(*) FROM twitter.tweets"
-);
-$future = $session->executeAsync($statement);
-$result = $future->get();
-$id = md5(uniqid($_SESSION['username'], true));
-
+	//        $phrase = 'ERROR';
+	//    }
+else {
+		$cluster = Cassandra::cluster()->build();
+		$keyspace = 'twitter';
+		$session = $cluster->connect($keyspace);
+		$statement = new Cassandra\SimpleStatement(
+			"SELECT COUNT(*) FROM twitter.tweets"
+		);
+		$future = $session->executeAsync($statement);
+		$result = $future->get();
+		$id = md5(uniqid($_SESSION['username'], true));
 
 //$results_file = fopen('results.txt', 'a');
-//fwrite($results_file, strval($id) . ': "' . $content . '"' . PHP_EOL);
-//fclose($results_file);
+		//fwrite($results_file, strval($id) . ': "' . $content . '"' . PHP_EOL);
+		//fclose($results_file);
 
-$batch     = new Cassandra\BatchStatement(Cassandra::BATCH_LOGGED);
+		$batch = new Cassandra\BatchStatement(Cassandra::BATCH_LOGGED);
 
-$escape = str_replace("'", "''", $content);
+		$escape = str_replace("'", "''", $content);
 
-$insertByTime = new Cassandra\SimpleStatement(
-    "INSERT INTO twitter.tweets (id,content,sort,timestamp,username) VALUES ('" . strval($id) . "','" . $escape . "',1," . time() . ",'" . strtolower($_SESSION['username']) . "')"
-);
+		$insertByTime = new Cassandra\SimpleStatement(
+			"INSERT INTO twitter.tweets (id,content,sort,timestamp,username) VALUES ('" . strval($id) . "','" . $escape . "',1," . time() . ",'" . strtolower($_SESSION['username']) . "')"
+		);
 
-$insertById = new Cassandra\SimpleStatement(
-    "INSERT INTO twitter.tweetsbyid (id,content,sort,timestamp,username) VALUES ('" . strval($id) . "','" . $escape . "',1," . time() . ",'" . strtolower($_SESSION['username']) . "')"
-);
+		$insertById = new Cassandra\SimpleStatement(
+			"INSERT INTO twitter.tweetsbyid (id,content,sort,timestamp,username) VALUES ('" . strval($id) . "','" . $escape . "',1," . time() . ",'" . strtolower($_SESSION['username']) . "')"
+		);
 
-$batch->add($insertByTime);
-$batch->add($insertById);
+		$batch->add($insertByTime);
+		$batch->add($insertById);
 
-$session->executeAsync($batch);
-$session->closeAsync();            
-            $phrase = 'OK';
-}
-    $response = array("status" => $phrase);
+		$session->execute($batch);
+		$session->closeAsync();
+		$phrase = 'OK';
+	}
+	$response = array("status" => $phrase);
 
-if(strcmp($phrase, 'OK') === 0) {
-    $response['id'] = strval($id);
-}
+	if (strcmp($phrase, 'OK') === 0) {
+		$response['id'] = strval($id);
+	}
 	$json = json_encode($response);
 
 	echo $json;
-elseif($_SESSION['username'] === NULL):
-    $response = array("status" => "error");
-    $response['error'] = 'You must be logged in before you can compose tweets.';
-    $json = json_encode($response);
-    echo $json;
-else :
+elseif ($_SESSION['username'] === NULL):
+	$response = array("status" => "error");
+	$response['error'] = 'You must be logged in before you can compose tweets.';
+	$json = json_encode($response);
+	echo $json;
+else:
 ?>
 <html>
 <head>
