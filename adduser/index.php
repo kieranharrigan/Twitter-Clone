@@ -5,7 +5,6 @@ $password = $fields['password'];
 $email = $fields['email'];
 
 if ($username !== NULL && $password !== NULL && $email !== NULL):
-	$username = preg_replace('/\s+/', '', $username);
 	$email = preg_replace('/\s+/', '', $email);
 
 	if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
