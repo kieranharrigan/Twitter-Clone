@@ -26,10 +26,18 @@ if ($email === NULL || $key === NULL) {
 		if ($row !== NULL) {
 			if ($row['disabled']) {
 				if (strcmp($row['key'], $key) === 0 || strcmp($key, 'abracadabra') === 0) {
-					$statement = new Cassandra\SimpleStatement(
-						"UPDATE twitter.users SET disabled=false WHERE username='" . strtolower($username) . "' AND email='" . strtolower($email) . "'"
+					$batch = new Cassandra\BatchStatement(Cassandra::BATCH_LOGGED);
+
+					$users = new Cassandra\SimpleStatement(
+						"UPDATE users SET disabled=false WHERE username='" . strtolower($username) . "' AND email='" . strtolower($email) . "'"
 					);
-					$session->executeAsync($statement);
+					$emails = new Cassandra\SimpleStatement(
+						"UPDATE emails SET disabled=false WHERE username='" . strtolower($username) . "' AND email='" . strtolower($email) . "'"
+					);
+
+					$batch->add($users);
+					$batch->add($emails);
+					$session->execute($batch);
 
 					$phrase = 'OK';
 					$ok = $row['username'] . ' verified successfully.';
