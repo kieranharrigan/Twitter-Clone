@@ -30,7 +30,8 @@ if ($username !== NULL && $password !== NULL):
 		}
 	} else {
 		$phrase = 'ERROR';
-		$err = 'No user named ' . $strtolower($username) . ' exists.';
+		$err = 'hi';
+		//$err = 'No user named ' . $strtolower($username) . ' exists.';
 	}
 
 	$session->closeAsync();
