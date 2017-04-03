@@ -17,7 +17,6 @@
 				url: "/verify/index.php",
 				type: "POST",
 				data: json,
-				dataType: "json",
 				success: function(reply) {
 					document.write(reply);
 				}
