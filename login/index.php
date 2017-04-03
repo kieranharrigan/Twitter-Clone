@@ -3,50 +3,47 @@ $fields = json_decode(file_get_contents('php://input'), true);
 $username = $fields['username'];
 $password = $fields['password'];
 
-if ($username !== NULL && $password !== NULL) :
+if ($username !== NULL && $password !== NULL):
 
-$cluster = Cassandra::cluster()->build();
-$keyspace = 'twitter';
-$session = $cluster->connect($keyspace);
-$statement = new Cassandra\SimpleStatement(
-    "SELECT * FROM twitter.users WHERE username='" . strtolower($username) . "'"
-);
-$future = $session->executeAsync($statement);
-$result = $future->get();
-$row = $result->first();
+	$cluster = Cassandra::cluster()->build();
+	$keyspace = 'twitter';
+	$session = $cluster->connect($keyspace);
+	$statement = new Cassandra\SimpleStatement(
+		"SELECT * FROM users WHERE username='" . strtolower($username) . "'"
+	);
+	$future = $session->execute($statement);
+	$result = $future->get();
+	$row = $result->first();
 
 	if ($row !== NULL) {
 		if ($row['disabled']) {
 			$phrase = 'ERROR';
-                        $err = strtolower($username) . ' is a disabled user.';
-		}
-		else {
-			if(strcmp($row['password'], $password) === 0) {
+			$err = strtolower($username) . ' is a disabled user.';
+		} else {
+			if (strcmp($row['password'], $password) === 0) {
 				$phrase = 'OK';
 				session_start();
 				$_SESSION['username'] = strtolower($username);
-			}
-			else {
+			} else {
 				$phrase = 'ERROR';
-                                $err = 'Incorrect password for ' . strtolower($username);
+				$err = 'Incorrect password for ' . strtolower($username);
 			}
 		}
-	}
-	else {
+	} else {
 		$phrase = 'ERROR';
-                $err = 'No user named ' . $strtolower($username) . ' exists.';
+		$err = 'No user named ' . $strtolower($username) . ' exists.';
 	}
 
-$session->closeAsync();
+	$session->closeAsync();
 
 	$response = array("status" => $phrase);
-if(strcmp($phrase, 'ERROR') === 0) {
-    $response['error'] = $err;
-}
+	if (strcmp($phrase, 'ERROR') === 0) {
+		$response['error'] = $err;
+	}
 	$json = json_encode($response);
 
 	echo $json;
-else :
+else:
 ?>
 <html>
 <head>
