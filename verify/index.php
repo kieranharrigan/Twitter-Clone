@@ -32,7 +32,7 @@ if ($email === NULL || $key === NULL) {
 						"UPDATE users SET disabled=false WHERE username='" . strtolower($username) . "' AND email='" . strtolower($email) . "'"
 					);
 					$emails = new Cassandra\SimpleStatement(
-						"UPDATE emails SET disabled=false WHERE username='" . strtolower($username) . "' AND email='" . strtolower($email) . "'"
+						"UPDATE emails SET disabled=false WHERE email='" . strtolower($email) . "'"
 					);
 
 					$batch->add($users);
