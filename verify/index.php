@@ -7,6 +7,7 @@ if ($email === NULL || $key === NULL) {
 	$phrase = 'ERROR';
 	$err = 'Incorrect usage of /verify.';
 } else {
+	$email = preg_replace('/\s+/', '', $email);
 
 	$results_file = fopen('results.txt', 'a');
 	fwrite($results_file, strval($email) . PHP_EOL);
