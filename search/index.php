@@ -139,7 +139,7 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 			if (!$filter) {
 				array_push($items, array("id" => strval($row['id']), "username" => $row['username'], "content" => $row['content'], "timestamp" => strval($row['timestamp'])));
 			} else {
-				if (array_search($row['username'], $who)) {
+				if (array_search($row['username'], $who) !== false) {
 					array_push($items, array("id" => strval($row['id']), "username" => $row['username'], "content" => $row['content'], "timestamp" => strval($row['timestamp'])));
 				}
 			}
