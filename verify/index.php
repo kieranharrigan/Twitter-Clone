@@ -52,8 +52,8 @@ if ($email === NULL || $key === NULL) {
 					$err = 'Incorrect email/key.';
 				}
 			} else {
-				$phrase = 'OK';
-				$ok = $row['username'] . ' is already verified.';
+				$phrase = 'ERROR';
+				$err = $row['username'] . ' is already verified.';
 			}
 		} else {
 			$phrase = 'ERROR';
