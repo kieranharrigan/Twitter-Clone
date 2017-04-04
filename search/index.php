@@ -95,24 +95,24 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 			if (strcmp($query, '') !== 0) {
 				// NEED TO GET FOLLOWING AND LOOP
 				$statement = new Cassandra\SimpleStatement(
-					"SELECT * FROM tweetsbyun WHERE sort=1 AND timestamp <= " . $timestamp . " AND content LIKE '%" . $query . "%'"
+					"SELECT * FROM tweets WHERE sort=1 AND timestamp <= " . $timestamp . " AND content LIKE '%" . $query . "%'"
 				);
 			} else {
 				// NEED TO GET FOLLOWING AND LOOP
 				$statement = new Cassandra\SimpleStatement(
-					"SELECT * FROM tweetsbyun WHERE sort=1 AND timestamp <= " . $timestamp
+					"SELECT * FROM tweets WHERE sort=1 AND timestamp <= " . $timestamp
 				);
 			}
 		} else {
 			if (strcmp($query, '') !== 0) {
 				// DONE
 				$statement = new Cassandra\SimpleStatement(
-					"SELECT * FROM tweetsbyun WHERE sort=1 AND timestamp <= " . $timestamp . " AND content LIKE '%" . $query . "%' LIMIT " . $limit
+					"SELECT * FROM tweets WHERE sort=1 AND timestamp <= " . $timestamp . " AND content LIKE '%" . $query . "%' LIMIT " . $limit
 				);
 			} else {
 				// DONE
 				$statement = new Cassandra\SimpleStatement(
-					"SELECT * FROM tweetsbyun WHERE sort=1 AND timestamp <= " . $timestamp . " LIMIT " . $limit
+					"SELECT * FROM tweets WHERE sort=1 AND timestamp <= " . $timestamp . " LIMIT " . $limit
 				);
 			}
 		}
