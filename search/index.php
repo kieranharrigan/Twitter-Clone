@@ -48,7 +48,7 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 			die();
 		}
 
-		if ($username !== NULL) {
+		if (strcmp($username, '') !== 0) {
 			$key = array_search(strtolower($username), $who);
 
 			if ($key === false) {
@@ -64,9 +64,9 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 
 	}
 
-	if ($username !== NULL) {
+	if (strcmp($username, '') !== 0) {
 		if ($following) {
-			if ($query !== NULL) {
+			if (strcmp($query, '') !== 0) {
 				// NEED TO GET FOLLOWING AND LOOP
 				$statement = new Cassandra\SimpleStatement(
 					"SELECT * FROM tweetsbyun WHERE username='" . strtolower($username) . "' AND timestamp <= " . $timestamp . " AND content LIKE '%" . $query . "%'"
@@ -78,7 +78,7 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 				);
 			}
 		} else {
-			if ($query !== NULL) {
+			if (strcmp($query, '') !== 0) {
 				// DONE
 				$statement = new Cassandra\SimpleStatement(
 					"SELECT * FROM tweetsbyun WHERE username='" . strtolower($username) . "' AND timestamp <= " . $timestamp . " AND content LIKE '%" . $query . "%' LIMIT " . $limit
@@ -92,7 +92,7 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 		}
 	} else {
 		if ($following) {
-			if ($query !== NULL) {
+			if (strcmp($query, '') !== 0) {
 				// NEED TO GET FOLLOWING AND LOOP
 				$statement = new Cassandra\SimpleStatement(
 					"SELECT * FROM tweetsbyun WHERE sort=1 AND timestamp <= " . $timestamp . " AND content LIKE '%" . $query . "%'"
@@ -104,7 +104,7 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 				);
 			}
 		} else {
-			if ($query !== NULL) {
+			if (strcmp($query, '') !== 0) {
 				// DONE
 				$statement = new Cassandra\SimpleStatement(
 					"SELECT * FROM tweetsbyun WHERE sort=1 AND timestamp <= " . $timestamp . " AND content LIKE '%" . $query . "%' LIMIT " . $limit
