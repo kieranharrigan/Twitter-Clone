@@ -11,6 +11,8 @@ function passToAdd() {
                 }
 	});
 
+	console.log(JSON.stringify(json));
+
 	$.ajax({
 		url: "/search/index.php/",
 		type: "POST",
