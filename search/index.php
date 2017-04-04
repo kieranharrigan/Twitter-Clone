@@ -30,7 +30,7 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 
 	if ($following) {
 		$statement = new Cassandra\SimpleStatement(
-			"SELECT * FROM users WHERE username='" . strtolower($username) . "'"
+			"SELECT * FROM users WHERE username='" . $_SESSION['username'] . "'"
 		);
 		$future = $session->executeAsync($statement);
 		$result = $future->get();
