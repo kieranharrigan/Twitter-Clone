@@ -4,6 +4,13 @@ session_start();
 $fields = json_decode(file_get_contents('php://input'), true);
 $timestamp = $fields['timestamp'];
 $limit = $fields['limit'];
+$query = $fields['q'];
+$username = $fields['username'];
+$following = $fields['following'];
+
+if ($following === NULL) {
+	$following = false;
+}
 
 //if($timestamp === NULL) {
 //    $timestamp = time();
@@ -13,49 +20,136 @@ $limit = $fields['limit'];
 //    $limit = 25;
 //}
 
-if($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL) :
+if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 
 //header('Content-Type: application/json');
 
-$cluster = Cassandra::cluster()->build();
-$keyspace = 'twitter';
-$session = $cluster->connect($keyspace);
-$statement = new Cassandra\SimpleStatement(
-    "SELECT * FROM tweets WHERE sort=1 AND timestamp <= " . $timestamp . " LIMIT " . $limit
-);
-$future = $session->executeAsync($statement);
-$result = $future->get();
+	$cluster = Cassandra::cluster()->build();
+	$keyspace = 'twitter';
+	$session = $cluster->connect($keyspace);
 
-if($result->first() === NULL) {
-    $phrase = 'ERROR';
-    $response = array("status" => $phrase);
-    $err = 'No tweets found at ' . strval($timestamp) . ' or earlier.';
-    $response['error'] = $err;
-}
-else {
-    $phrase = 'OK';
-    $response = array("status" => $phrase);
-    $items = array();
-    $item = array();
+	if ($following) {
+		$statement = new Cassandra\SimpleStatement(
+			"SELECT * FROM users WHERE username='" . strtolower($username) . "'"
+		);
+		$future = $session->executeAsync($statement);
+		$result = $future->get();
+		$row = $result->first();
 
-    foreach($result as $row) {
-        array_push($items, array("id" => strval($row['id']), "username" => $row['username'], "content" => $row['content'], "timestamp" => strval($row['timestamp'])));
-    }
-    $response['items'] = $items;
-}
+		$who = json_decode($row['following'], true)['following'];
 
-$session->closeAsync();
+		if (sizeof($who) === 0) {
+			$phrase = 'ERROR';
+			$response = array("status" => $phrase);
+			$response['error'] = 'You aren\'t following anyone!';
+			$json = json_encode($response);
+
+			echo $json;
+			die();
+		}
+
+		if ($username !== NULL) {
+			$key = array_search(strtolower($username), $who);
+
+			if ($key === false) {
+				$phrase = 'ERROR';
+				$response = array("status" => $phrase);
+				$response['error'] = 'You aren\'t following ' . strtolower($username) . '.';
+				$json = json_encode($response);
+
+				echo $json;
+				die();
+			}
+		}
+
+	}
+
+	if ($username !== NULL) {
+		if ($following) {
+			if ($query !== NULL) {
+				// NEED TO GET FOLLOWING AND LOOP
+				$statement = new Cassandra\SimpleStatement(
+					"SELECT * FROM tweetsbyun WHERE username='" . strtolower($username) . "' AND timestamp <= " . $timestamp . " AND content LIKE '%" . $query . "%'"
+				);
+			} else {
+				// NEED TO GET FOLLOWING AND LOOP
+				$statement = new Cassandra\SimpleStatement(
+					"SELECT * FROM tweetsbyun WHERE username='" . strtolower($username) . "' AND timestamp <= " . $timestamp
+				);
+			}
+		} else {
+			if ($query !== NULL) {
+				// DONE
+				$statement = new Cassandra\SimpleStatement(
+					"SELECT * FROM tweetsbyun WHERE username='" . strtolower($username) . "' AND timestamp <= " . $timestamp . " AND content LIKE '%" . $query . "%' LIMIT " . $limit
+				);
+			} else {
+				// DONE
+				$statement = new Cassandra\SimpleStatement(
+					"SELECT * FROM tweetsbyun WHERE username='" . strtolower($username) . "' AND timestamp <= " . $timestamp . " LIMIT " . $limit
+				);
+			}
+		}
+	} else {
+		if ($following) {
+			if ($query !== NULL) {
+				// NEED TO GET FOLLOWING AND LOOP
+				$statement = new Cassandra\SimpleStatement(
+					"SELECT * FROM tweetsbyun WHERE sort=1 AND timestamp <= " . $timestamp . " AND content LIKE '%" . $query . "%'"
+				);
+			} else {
+				// NEED TO GET FOLLOWING AND LOOP
+				$statement = new Cassandra\SimpleStatement(
+					"SELECT * FROM tweetsbyun WHERE sort=1 AND timestamp <= " . $timestamp
+				);
+			}
+		} else {
+			if ($query !== NULL) {
+				// DONE
+				$statement = new Cassandra\SimpleStatement(
+					"SELECT * FROM tweetsbyun WHERE sort=1 AND timestamp <= " . $timestamp . " AND content LIKE '%" . $query . "%' LIMIT " . $limit
+				);
+			} else {
+				// DONE
+				$statement = new Cassandra\SimpleStatement(
+					"SELECT * FROM tweetsbyun WHERE sort=1 AND timestamp <= " . $timestamp . " LIMIT " . $limit
+				);
+			}
+		}
+	}
+
+	$future = $session->executeAsync($statement);
+	$result = $future->get();
+
+	if ($result->first() === NULL) {
+		$phrase = 'ERROR';
+		$response = array("status" => $phrase);
+		$err = 'No tweets found at ' . strval($timestamp) . ' or earlier.';
+		$response['error'] = $err;
+	} else {
+		$phrase = 'OK';
+		$response = array("status" => $phrase);
+		$items = array();
+		$item = array();
+
+		foreach ($result as $row) {
+			array_push($items, array("id" => strval($row['id']), "username" => $row['username'], "content" => $row['content'], "timestamp" => strval($row['timestamp'])));
+		}
+		$response['items'] = $items;
+	}
+
+	$session->closeAsync();
 
 	$json = json_encode($response);
 
 	echo $json;
 
-elseif($_SESSION['username'] === NULL):
-    $response = array("status" => "error");
-    $response['error'] = 'You must be logged in before you can search tweets.';
-    $json = json_encode($response);
-    echo $json;
-else :
+elseif ($_SESSION['username'] === NULL):
+	$response = array("status" => "error");
+	$response['error'] = 'You must be logged in before you can search tweets.';
+	$json = json_encode($response);
+	echo $json;
+else:
 ?>
 <html>
 <head>
@@ -67,6 +161,9 @@ else :
     <form id="input" onsubmit="event.preventDefault(); passToAdd();" autocomplete="off">
         Tweets from this time and earlier: <input type="text" name="timestamp" value="<?php echo time() ?>" autofocus onfocus="this.value = this.value;"><br>
         Maximum number of results: <input type="text" name="limit" value="25"><br>
+        Search term: <input type="text" name="q"><br>
+        Only show tweets by this user: <input type="text" name="username"><br>
+        Only show tweets by users you follow: <input type="checkbox" name="following" value="following" checked><br>
         <input type="submit" value="search">
     </form>
 
@@ -76,4 +173,3 @@ else :
 <?php
 endif;
 ?>
-
