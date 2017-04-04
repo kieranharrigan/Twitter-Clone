@@ -26,15 +26,20 @@ else {
 		$escape = str_replace("'", "''", $content);
 
 		$insertByTime = new Cassandra\SimpleStatement(
-			"INSERT INTO twitter.tweets (id,content,sort,timestamp,username) VALUES ('" . strval($id) . "','" . $escape . "',1," . time() . ",'" . strtolower($_SESSION['username']) . "')"
+			"INSERT INTO tweets (id,content,sort,timestamp,username) VALUES ('" . strval($id) . "','" . $escape . "',1," . time() . ",'" . strtolower($_SESSION['username']) . "')"
 		);
 
 		$insertById = new Cassandra\SimpleStatement(
-			"INSERT INTO twitter.tweetsbyid (id,content,sort,timestamp,username) VALUES ('" . strval($id) . "','" . $escape . "',1," . time() . ",'" . strtolower($_SESSION['username']) . "')"
+			"INSERT INTO tweetsbyid (id,content,sort,timestamp,username) VALUES ('" . strval($id) . "','" . $escape . "',1," . time() . ",'" . strtolower($_SESSION['username']) . "')"
+		);
+
+		$insertByUn = new Cassandra\SimpleStatement(
+			"INSERT INTO tweetsbyun (id,content,sort,timestamp,username) VALUES ('" . strval($id) . "','" . $escape . "',1," . time() . ",'" . strtolower($_SESSION['username']) . "')"
 		);
 
 		$batch->add($insertByTime);
 		$batch->add($insertById);
+		$batch->add($insertByUn);
 
 		$session->execute($batch);
 		$session->closeAsync();
