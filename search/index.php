@@ -7,6 +7,7 @@ $limit = $fields['limit'];
 $query = $fields['q'];
 $username = $fields['username'];
 $following = $fields['following'];
+$filter = false;
 
 if ($following === NULL) {
 	$following = false;
@@ -103,6 +104,8 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 					"SELECT * FROM tweets WHERE sort=1 AND timestamp <= " . $timestamp
 				);
 			}
+
+			$filter = true;
 		} else {
 			if (strcmp($query, '') !== 0) {
 				// DONE
@@ -133,9 +136,23 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 		$item = array();
 
 		foreach ($result as $row) {
-			array_push($items, array("id" => strval($row['id']), "username" => $row['username'], "content" => $row['content'], "timestamp" => strval($row['timestamp'])));
+			if (!$filter) {
+				array_push($items, array("id" => strval($row['id']), "username" => $row['username'], "content" => $row['content'], "timestamp" => strval($row['timestamp'])));
+			} else {
+				if (array_search($row['username'], $who)) {
+					array_push($items, array("id" => strval($row['id']), "username" => $row['username'], "content" => $row['content'], "timestamp" => strval($row['timestamp'])));
+				}
+			}
 		}
-		$response['items'] = $items;
+
+		if (sizeof($items) === 0) {
+			$phrase = 'ERROR';
+			$response = array("status" => $phrase);
+			$err = 'No tweets found at ' . strval($timestamp) . ' or earlier.';
+			$response['error'] = $err;
+		} else {
+			$response['items'] = $items;
+		}
 	}
 
 	$session->closeAsync();
