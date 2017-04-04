@@ -9,10 +9,6 @@ if ($email === NULL || $key === NULL) {
 } else {
 	$email = preg_replace('/\s+/', '', $email);
 
-	$results_file = fopen('results.txt', 'a');
-	fwrite($results_file, strval($email) . PHP_EOL);
-	fclose($results_file);
-
 	if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 		$phrase = 'ERROR';
 		$err = 'Invalid email address.';
@@ -68,14 +64,8 @@ $response = array("status" => $phrase);
 
 if (strcmp($phrase, 'OK') === 0) {
 	$response['msg'] = $ok;
-	$results_file = fopen('results.txt', 'a');
-	fwrite($results_file, $ok . PHP_EOL);
-	fclose($results_file);
 } else {
 	$response['error'] = $err;
-	$results_file = fopen('results.txt', 'a');
-	fwrite($results_file, $err . PHP_EOL);
-	fclose($results_file);
 }
 
 $json = json_encode($response);
