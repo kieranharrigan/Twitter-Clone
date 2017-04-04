@@ -67,14 +67,14 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 	if (strcmp($username, '') !== 0) {
 		if ($following) {
 			if (strcmp($query, '') !== 0) {
-				// NEED TO GET FOLLOWING AND LOOP
+				// DONE
 				$statement = new Cassandra\SimpleStatement(
-					"SELECT * FROM tweetsbyun WHERE username='" . strtolower($username) . "' AND timestamp <= " . $timestamp . " AND content LIKE '%" . $query . "%'"
+					"SELECT * FROM tweetsbyun WHERE username='" . strtolower($username) . "' AND timestamp <= " . $timestamp . " AND content LIKE '%" . $query . "%' LIMIT " . $limit
 				);
 			} else {
-				// NEED TO GET FOLLOWING AND LOOP
+				// DONE
 				$statement = new Cassandra\SimpleStatement(
-					"SELECT * FROM tweetsbyun WHERE username='" . strtolower($username) . "' AND timestamp <= " . $timestamp
+					"SELECT * FROM tweetsbyun WHERE username='" . strtolower($username) . "' AND timestamp <= " . $timestamp . " LIMIT " . $limit
 				);
 			}
 		} else {
