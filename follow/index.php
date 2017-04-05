@@ -2,7 +2,7 @@
 session_start();
 
 $fields = json_decode(file_get_contents('php://input'), true);
-$tofollow = $fields['tofollow'];
+$tofollow = $fields['username'];
 $follow = $fields['follow'];
 
 if ($follow === NULL) {
