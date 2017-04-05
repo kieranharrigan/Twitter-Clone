@@ -70,7 +70,7 @@ function doGet() {
 		$keyspace = 'twitter';
 		$session = $cluster->connect($keyspace);
 		$statement = new Cassandra\SimpleStatement(
-			"SELECT * FROM twitter.tweetsbyid WHERE id='" . $id . "'"
+			"SELECT * FROM tweetsbyid WHERE id='" . $id . "'"
 		);
 		$future = $session->executeAsync($statement);
 		$result = $future->get();
