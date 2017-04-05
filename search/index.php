@@ -101,9 +101,7 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 
 				$filter = true;
 			} else {
-				echo 'hey';
 				$q = "SELECT * FROM tweetsbyun WHERE timestamp <= " . $timestamp . " AND username in (";
-				echo $q;
 
 				$first = true;
 				foreach ($who as $name) {
@@ -118,7 +116,7 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 					}
 				}
 
-				$q .= " LIMIT " . $limit;
+				$q .= ") LIMIT " . $limit;
 
 				echo $q;
 
