@@ -98,14 +98,31 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 				$statement = new Cassandra\SimpleStatement(
 					"SELECT * FROM tweets WHERE sort=1 AND timestamp <= " . $timestamp . " AND content LIKE '%" . $query . "%'"
 				);
+
+				$filter = true;
 			} else {
+				$q = "SELECT * FROM tweetsbyun WHERE timestamp <= " . $timestamp . " AND username in (";
+
+				$first = true;
+				foreach ($who as $name) {
+					if (!$first) {
+						$q .= ", ";
+					}
+
+					$q .= "'" . $name . "'";
+
+					if ($first) {
+						$first = false;
+					}
+				}
+
+				$q .= " LIMIT " . $limit;
+
 				// NEED TO GET FOLLOWING AND LOOP
 				$statement = new Cassandra\SimpleStatement(
-					"SELECT * FROM tweets WHERE sort=1 AND timestamp <= " . $timestamp
+					$q
 				);
 			}
-
-			$filter = true;
 		} else {
 			if (strcmp($query, '') !== 0) {
 				// DONE
