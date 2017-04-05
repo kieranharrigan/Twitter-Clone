@@ -69,15 +69,15 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 	fwrite($results_file, 'Query: "' . $query . '"' . PHP_EOL);
 	fclose($results_file);
 
-	if (strcmp($query, '') !== 0) {
-		$query = str_replace("'", "''", $query);
+	//if (strcmp($query, '') !== 0) {
+	//	$query = str_replace("'", "''", $query);
 
-		$needle = strpos($query, ' ');
+	//	$needle = strpos($query, ' ');
 
-		if ($needle !== false) {
-			$query = substr($query, 0, $needle);
-		}
-	}
+	//	if ($needle !== false) {
+	//		$query = substr($query, 0, $needle);
+	//	}
+	//}
 
 	if (strcmp($username, '') !== 0) {
 		if ($following) {
@@ -173,43 +173,43 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 	$future = $session->executeAsync($statement);
 	$result = $future->get();
 
-	if ($result->first() === NULL) {
-		$phrase = 'ERROR';
-		$response = array("status" => $phrase);
-		$err = 'No tweets found at ' . strval($timestamp) . ' or earlier.';
-		$response['error'] = $err;
-	} else {
-		$phrase = 'OK';
-		$response = array("status" => $phrase);
-		$items = array();
-		$item = array();
+	//if ($result->first() === NULL) {
+	//	$phrase = 'ERROR';
+	//	$response = array("status" => $phrase);
+	//	$err = 'No tweets found at ' . strval($timestamp) . ' or earlier.';
+	//	$response['error'] = $err;
+	//} else {
+	$phrase = 'OK';
+	$response = array("status" => $phrase);
+	$items = array();
+	$item = array();
 
-		$count = 0;
+	$count = 0;
 
-		foreach ($result as $row) {
-			if (!$filter) {
+	foreach ($result as $row) {
+		if (!$filter) {
+			array_push($items, array("id" => strval($row['id']), "username" => $row['username'], "content" => $row['content'], "timestamp" => strval($row['timestamp'])));
+		} else {
+			if (array_search($row['username'], $who) !== false) {
 				array_push($items, array("id" => strval($row['id']), "username" => $row['username'], "content" => $row['content'], "timestamp" => strval($row['timestamp'])));
-			} else {
-				if (array_search($row['username'], $who) !== false) {
-					array_push($items, array("id" => strval($row['id']), "username" => $row['username'], "content" => $row['content'], "timestamp" => strval($row['timestamp'])));
-					$count++;
+				$count++;
 
-					if ($count >= $limit) {
-						break;
-					}
+				if ($count >= $limit) {
+					break;
 				}
 			}
 		}
-
-		if (sizeof($items) === 0) {
-			$phrase = 'ERROR';
-			$response = array("status" => $phrase);
-			$err = 'No tweets found at ' . strval($timestamp) . ' or earlier.';
-			$response['error'] = $err;
-		} else {
-			$response['items'] = $items;
-		}
 	}
+
+	//if (sizeof($items) === 0) {
+	//	$phrase = 'ERROR';
+	//	$response = array("status" => $phrase);
+	//	$err = 'No tweets found at ' . strval($timestamp) . ' or earlier.';
+	//	$response['error'] = $err;
+	//} else {
+	$response['items'] = $items;
+	//}
+	//}
 
 	$session->closeAsync();
 
