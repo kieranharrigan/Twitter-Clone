@@ -11,7 +11,7 @@ function doDelete() {
 	$id = $_GET['id'];
 
 	if ($id !== NULL) {
-		$cluster = Cassandra::cluster()->build();
+		$cluster = Cassandra::cluster()->withContactPoints('192.168.1.7')->build();
 		$keyspace = 'twitter';
 		$session = $cluster->connect($keyspace);
 		$statement = new Cassandra\SimpleStatement(
@@ -66,7 +66,7 @@ function doGet() {
 	$id = $_GET['id'];
 
 	if ($id !== NULL) {
-		$cluster = Cassandra::cluster()->build();
+		$cluster = Cassandra::cluster()->withContactPoints('192.168.1.7')->build();
 		$keyspace = 'twitter';
 		$session = $cluster->connect($keyspace);
 		$statement = new Cassandra\SimpleStatement(
