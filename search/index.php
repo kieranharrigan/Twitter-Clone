@@ -82,26 +82,34 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 	if (strcmp($username, '') !== 0) {
 		if ($following) {
 			if (strcmp($query, '') !== 0) {
+				$q = "SELECT * FROM tweetsbyun WHERE username='" . strtolower($username) . "' AND timestamp <= " . $timestamp . " AND content LIKE '%" . $query . "%' LIMIT " . $limit;
+
 				// DONE
 				$statement = new Cassandra\SimpleStatement(
-					"SELECT * FROM tweetsbyun WHERE username='" . strtolower($username) . "' AND timestamp <= " . $timestamp . " AND content LIKE '%" . $query . "%' LIMIT " . $limit
+					$q
 				);
 			} else {
+				$q = "SELECT * FROM tweetsbyun WHERE username='" . strtolower($username) . "' AND timestamp <= " . $timestamp . " LIMIT " . $limit;
+
 				// DONE
 				$statement = new Cassandra\SimpleStatement(
-					"SELECT * FROM tweetsbyun WHERE username='" . strtolower($username) . "' AND timestamp <= " . $timestamp . " LIMIT " . $limit
+					$q
 				);
 			}
 		} else {
 			if (strcmp($query, '') !== 0) {
+				$q = "SELECT * FROM tweetsbyun WHERE username='" . strtolower($username) . "' AND timestamp <= " . $timestamp . " AND content LIKE '%" . $query . "%' LIMIT " . $limit;
+
 				// DONE
 				$statement = new Cassandra\SimpleStatement(
-					"SELECT * FROM tweetsbyun WHERE username='" . strtolower($username) . "' AND timestamp <= " . $timestamp . " AND content LIKE '%" . $query . "%' LIMIT " . $limit
+					$q
 				);
 			} else {
+				$q = "SELECT * FROM tweetsbyun WHERE username='" . strtolower($username) . "' AND timestamp <= " . $timestamp . " LIMIT " . $limit;
+
 				// DONE
 				$statement = new Cassandra\SimpleStatement(
-					"SELECT * FROM tweetsbyun WHERE username='" . strtolower($username) . "' AND timestamp <= " . $timestamp . " LIMIT " . $limit
+					$q
 				);
 			}
 		}
@@ -114,10 +122,6 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 				$statement = new Cassandra\SimpleStatement(
 					$q
 				);
-
-				$results_file = fopen('results.txt', 'a');
-				fwrite($results_file, $q . PHP_EOL);
-				fclose($results_file);
 
 				$filter = true;
 			} else {
@@ -142,25 +146,29 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 				$statement = new Cassandra\SimpleStatement(
 					$q
 				);
-
-				$results_file = fopen('results.txt', 'a');
-				fwrite($results_file, $q . PHP_EOL);
-				fclose($results_file);
 			}
 		} else {
 			if (strcmp($query, '') !== 0) {
+				$q = "SELECT * FROM tweets WHERE sort=1 AND timestamp <= " . $timestamp . " AND content LIKE '%" . $query . "%' LIMIT " . $limit;
+
 				// DONE
 				$statement = new Cassandra\SimpleStatement(
-					"SELECT * FROM tweets WHERE sort=1 AND timestamp <= " . $timestamp . " AND content LIKE '%" . $query . "%' LIMIT " . $limit
+					$q
 				);
 			} else {
+				$q = "SELECT * FROM tweets WHERE sort=1 AND timestamp <= " . $timestamp . " LIMIT " . $limit;
+
 				// DONE
 				$statement = new Cassandra\SimpleStatement(
-					"SELECT * FROM tweets WHERE sort=1 AND timestamp <= " . $timestamp . " LIMIT " . $limit
+					$q
 				);
 			}
 		}
 	}
+
+	$results_file = fopen('results.txt', 'a');
+	fwrite($results_file, $q . PHP_EOL);
+	fclose($results_file);
 
 	$future = $session->executeAsync($statement);
 	$result = $future->get();
