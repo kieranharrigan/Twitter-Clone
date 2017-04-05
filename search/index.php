@@ -65,6 +65,8 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 
 	}
 
+	$query = str_replace("'", "''", $query);
+
 	if (strcmp($username, '') !== 0) {
 		if ($following) {
 			if (strcmp($query, '') !== 0) {
