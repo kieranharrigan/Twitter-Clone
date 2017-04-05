@@ -176,7 +176,7 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 	if ($result->first() === NULL) {
 		$phrase = 'ERROR';
 		$response = array("status" => $phrase);
-		$err = 'No tweets found at ' . strval($timestamp) . ' or earlier: ' . $q;
+		$err = 'No tweets found at ' . strval($timestamp) . ' or earlier.';
 		$response['error'] = $err;
 	} else {
 		$phrase = 'OK';
@@ -204,7 +204,7 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 		if (sizeof($items) === 0) {
 			$phrase = 'ERROR';
 			$response = array("status" => $phrase);
-			$err = 'No tweets found at ' . strval($timestamp) . ' or earlier: ' . $q;
+			$err = 'No tweets found at ' . strval($timestamp) . ' or earlier.';
 			$response['error'] = $err;
 		} else {
 			$response['items'] = $items;
