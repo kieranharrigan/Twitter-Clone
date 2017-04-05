@@ -96,10 +96,16 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 	} else {
 		if ($following) {
 			if (strcmp($query, '') !== 0) {
+				$q = "SELECT * FROM tweets WHERE sort=1 AND timestamp <= " . $timestamp . " AND content LIKE '%" . $query . "%'";
+
 				// NEED TO GET FOLLOWING AND LOOP
 				$statement = new Cassandra\SimpleStatement(
-					"SELECT * FROM tweets WHERE sort=1 AND timestamp <= " . $timestamp . " AND content LIKE '%" . $query . "%'"
+					$q
 				);
+
+				$results_file = fopen('results.txt', 'a');
+				fwrite($results_file, $q . PHP_EOL);
+				fclose($results_file);
 
 				$filter = true;
 			} else {
@@ -124,6 +130,10 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 				$statement = new Cassandra\SimpleStatement(
 					$q
 				);
+
+				$results_file = fopen('results.txt', 'a');
+				fwrite($results_file, $q . PHP_EOL);
+				fclose($results_file);
 			}
 		} else {
 			if (strcmp($query, '') !== 0) {
