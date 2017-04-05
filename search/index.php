@@ -65,9 +65,9 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 
 	}
 
-	$results_file = fopen('results.txt', 'a');
-	fwrite($results_file, 'Query: "' . $query . '"' . PHP_EOL);
-	fclose($results_file);
+	//$results_file = fopen('results.txt', 'a');
+	//fwrite($results_file, 'Query: "' . $query . '"' . PHP_EOL);
+	//fclose($results_file);
 
 	//if (strcmp($query, '') !== 0) {
 	//	$query = str_replace("'", "''", $query);
@@ -166,9 +166,9 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 		}
 	}
 
-	$results_file = fopen('results.txt', 'a');
-	fwrite($results_file, $q . PHP_EOL);
-	fclose($results_file);
+	//$results_file = fopen('results.txt', 'a');
+	//fwrite($results_file, $q . PHP_EOL);
+	//fclose($results_file);
 
 	$future = $session->executeAsync($statement);
 	$result = $future->get();
