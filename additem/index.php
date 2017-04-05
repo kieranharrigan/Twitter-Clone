@@ -45,10 +45,10 @@ else {
 		$batch->add($insertById);
 		$batch->add($insertByUn);
 
-		$local_sess->executeAsync($batch);
+		$local_sess->execute($batch);
 		$local_sess->closeAsync();
 
-		$session->executeAsync($batch);
+		$session->execute($batch);
 		$session->closeAsync();
 		$phrase = 'OK';
 	}
