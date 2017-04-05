@@ -176,7 +176,7 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 	if ($result->first() === NULL) {
 		$phrase = 'ERROR';
 		$response = array("status" => $phrase);
-		$err = 'No tweets found at ' . strval($timestamp) . ' or earlier.';
+		$err = 'No tweets found at ' . strval($timestamp) . ' or earlier: ' . $q;
 		$response['error'] = $err;
 	} else {
 		$phrase = 'OK';
