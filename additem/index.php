@@ -41,7 +41,7 @@ else {
 		$batch->add($insertById);
 		$batch->add($insertByUn);
 
-		$session->execute($batch);
+		$session->executeAsync($batch);
 		$session->closeAsync();
 		$phrase = 'OK';
 	}
