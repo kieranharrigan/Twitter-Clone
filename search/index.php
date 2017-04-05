@@ -118,6 +118,8 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 
 				$q .= " LIMIT " . $limit;
 
+				echo $q;
+
 				// NEED TO GET FOLLOWING AND LOOP
 				$statement = new Cassandra\SimpleStatement(
 					$q
