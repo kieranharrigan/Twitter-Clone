@@ -13,13 +13,13 @@ if ($following === NULL) {
 	$following = false;
 }
 
-//if($timestamp === NULL) {
-//    $timestamp = time();
-//}
+if ($timestamp === NULL) {
+	$timestamp = time();
+}
 
-//if($limit === NULL) {
-//    $limit = 25;
-//}
+if ($limit === NULL) {
+	$limit = 25;
+}
 
 if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 
@@ -117,8 +117,6 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 				}
 
 				$q .= ") LIMIT " . $limit;
-
-				echo $q;
 
 				// NEED TO GET FOLLOWING AND LOOP
 				$statement = new Cassandra\SimpleStatement(
