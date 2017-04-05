@@ -35,7 +35,7 @@ if ($email === NULL || $key === NULL) {
 					$users = new Cassandra\SimpleStatement(
 						$q
 					);
-					$session->executeAsync($q);
+					$session->execute($q);
 
 					$phrase = 'OK';
 					$ok = $row['username'] . ' verified successfully.';
