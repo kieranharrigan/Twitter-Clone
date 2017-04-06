@@ -10,6 +10,7 @@ if ($username !== NULL && $password !== NULL && $email !== NULL):
 	if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 		$phrase = 'Invalid email address.';
 	} else {
+		echo 'hi';
 		$cluster = Cassandra::cluster()->build();
 		$keyspace = 'twitter';
 		$session = $cluster->connect($keyspace);
