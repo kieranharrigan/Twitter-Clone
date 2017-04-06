@@ -39,7 +39,7 @@ if ($email === NULL || $key === NULL) {
 
 					$batch->add($users);
 					$batch->add($emails);
-					$session->execute($batch);
+					$session->executeAsync($batch);
 
 					$phrase = 'OK';
 					$ok = $row['username'] . ' verified successfully.';
