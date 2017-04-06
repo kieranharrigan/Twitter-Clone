@@ -141,7 +141,7 @@ function doUnfollow($tofollow, $session) {
 
 if ($tofollow !== NULL && $_SESSION['username'] !== NULL):
 
-	$cluster = Cassandra::cluster()->withContactPoints('192.168.1.7')->build();
+	$cluster = Cassandra::cluster()->build();
 	$keyspace = 'twitter';
 	$session = $cluster->connect($keyspace);
 
