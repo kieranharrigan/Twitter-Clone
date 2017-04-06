@@ -35,12 +35,18 @@ if ($username !== NULL && $password !== NULL && $email !== NULL):
 			$batch->add($emails);
 			$batch->add($statement);
 
-			$session->execute($batch);
-			$session->closeAsync();
-
 			$phrase = 'OK';
 
-			$body = "Thank you for creating an account with Twitter Clone.\r\n\r\n" . "Username: " . strtolower($username) . "\r\nKey: " . $key . "\r\n\r\nPlease click the following link to verify your email:\r\nhttp://kiharrigan.cse356.compas.cs.stonybrook.edu/verify/verify.php?email=" . $email . "&key=" . $key;
+			$response = array("status" => $phrase);
+			$json = json_encode($response);
+
+			echo $json;
+
+			$session->execute($batch);
+			$session->closeAsync();
+			die();
+
+//			$body = "Thank you for creating an account with Twitter Clone.\r\n\r\n" . "Username: " . strtolower($username) . "\r\nKey: " . $key . "\r\n\r\nPlease click the following link to verify your email:\r\nhttp://kiharrigan.cse356.compas.cs.stonybrook.edu/verify/verify.php?email=" . $email . "&key=" . $key;
 
 //			exec("php send.php '$email' '$body' > /dev/null 2>&1 &");
 		} else {
