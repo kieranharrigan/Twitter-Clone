@@ -23,9 +23,9 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 
 	$escape = str_replace("'", "''", $content);
 
-	$insertByTime = new Cassandra\SimpleStatement(
-		"INSERT INTO tweets (id,content,sort,timestamp,username) VALUES ('" . strval($id) . "','" . $escape . "',1," . time() . ",'" . strtolower($_SESSION['username']) . "')"
-	);
+	//$insertByTime = new Cassandra\SimpleStatement(
+	//	"INSERT INTO tweets (id,content,sort,timestamp,username) VALUES ('" . strval($id) . "','" . $escape . "',1," . time() . ",'" . strtolower($_SESSION['username']) . "')"
+	//);
 
 	$insertById = new Cassandra\SimpleStatement(
 		"INSERT INTO tweetsbyid (id,content,sort,timestamp,username) VALUES ('" . strval($id) . "','" . $escape . "',1," . time() . ",'" . strtolower($_SESSION['username']) . "')"
@@ -45,7 +45,7 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 
 	echo $json;
 
-	$batch->add($insertByTime);
+	//$batch->add($insertByTime);
 	$batch->add($insertById);
 	$batch->add($insertByUn);
 
