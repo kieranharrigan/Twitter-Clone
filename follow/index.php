@@ -61,12 +61,19 @@ function doFollow($tofollow, $session) {
 				"UPDATE users SET followers='" . strval(json_encode($followers_json)) . "' WHERE username='" . $tofollow . "' AND email='" . $tofollow_email . "'"
 			);
 
+			$phrase = 'OK';
+			$response = array("status" => $phrase);
+
+			$json = json_encode($response);
+
+			echo $json;
+
 			$batch->add($me);
 			$batch->add($them);
 			$session->execute($batch);
 
-			$phrase = 'OK';
-			$response = array("status" => $phrase);
+			$session->closeAsync();
+			die();
 		}
 	}
 
@@ -127,12 +134,19 @@ function doUnfollow($tofollow, $session) {
 				"UPDATE users SET followers='" . strval(json_encode($followers_json)) . "' WHERE username='" . $tounfollow . "' AND email='" . $tounfollow_email . "'"
 			);
 
+			$phrase = 'OK';
+			$response = array("status" => $phrase);
+
+			$json = json_encode($response);
+
+			echo $json;
+
 			$batch->add($me);
 			$batch->add($them);
 			$session->execute($batch);
 
-			$phrase = 'OK';
-			$response = array("status" => $phrase);
+			$session->closeAsync();
+			die();
 		}
 	}
 
