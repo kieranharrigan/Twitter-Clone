@@ -5,6 +5,10 @@ $fields = json_decode(file_get_contents('php://input'), true);
 $content = $fields['content'];
 
 if ($content !== NULL && $_SESSION['username'] !== NULL):
+	$local = Cassandra::cluster()->build();
+	$keyspace = 'twitter';
+	$local_sess = $local->connect($keyspace);
+
 	$cluster = Cassandra::cluster()->withContactPoints('192.168.1.13')->build();
 	$keyspace = 'twitter';
 	$session = $cluster->connect($keyspace);
@@ -44,6 +48,9 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 	$batch->add($insertByTime);
 	$batch->add($insertById);
 	$batch->add($insertByUn);
+
+	$local_sess->execute($insertById);
+	$local_sess->closeAsync();
 
 	$session->execute($batch);
 	$session->closeAsync();
