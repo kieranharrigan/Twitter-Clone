@@ -15,7 +15,7 @@ else {
 		$keyspace = 'twitter';
 		$local_sess = $local->connect($keyspace);
 
-		$cluster = Cassandra::cluster()->withContactPoints('192.168.1.7')->build();
+		$cluster = Cassandra::cluster()->withContactPoints('192.168.1.13')->build();
 		$keyspace = 'twitter';
 		$session = $cluster->connect($keyspace);
 

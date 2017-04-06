@@ -25,7 +25,7 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 
 //header('Content-Type: application/json');
 
-	$cluster = Cassandra::cluster()->withContactPoints('192.168.1.7')->build();
+	$cluster = Cassandra::cluster()->withContactPoints('192.168.1.13')->build();
 	$keyspace = 'twitter';
 	$session = $cluster->connect($keyspace);
 
