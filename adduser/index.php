@@ -10,12 +10,11 @@ if ($username !== NULL && $password !== NULL && $email !== NULL):
 	if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 		$phrase = 'Invalid email address.';
 	} else {
-		echo 'hi';
 		$cluster = Cassandra::cluster()->build();
 		$keyspace = 'twitter';
 		$session = $cluster->connect($keyspace);
 		$statement = new Cassandra\SimpleStatement(
-			"SELECT * FROM twitter.users WHERE username='" . strtolower($username) . "'"
+			"SELECT * FROM users WHERE username='" . strtolower($username) . "'"
 		);
 		$future = $session->executeAsync($statement);
 		$result = $future->get();
@@ -26,11 +25,11 @@ if ($username !== NULL && $password !== NULL && $email !== NULL):
 			$batch = new Cassandra\BatchStatement(Cassandra::BATCH_LOGGED);
 
 			$statement = new Cassandra\SimpleStatement(
-				"INSERT INTO twitter.users (username,password,disabled,email,key,followers,following) VALUES ('" . strtolower($username) . "','" . $password . "',true,'" . strtolower($email) . "','" . $key . "','{\"followers\":[]}','{\"following\":[]}')"
+				"INSERT INTO users (username,password,disabled,email,key,followers,following) VALUES ('" . strtolower($username) . "','" . $password . "',true,'" . strtolower($email) . "','" . $key . "','{\"followers\":[]}','{\"following\":[]}')"
 			);
 
 			$emails = new Cassandra\SimpleStatement(
-				"INSERT INTO twitter.emails (username,password,disabled,email,key) VALUES ('" . strtolower($username) . "','" . $password . "',true,'" . strtolower($email) . "','" . $key . "')"
+				"INSERT INTO emails (username,password,disabled,email,key) VALUES ('" . strtolower($username) . "','" . $password . "',true,'" . strtolower($email) . "','" . $key . "')"
 			);
 
 			$batch->add($emails);
