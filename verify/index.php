@@ -37,12 +37,26 @@ if ($email === NULL || $key === NULL) {
 						"UPDATE emails SET disabled=false WHERE email='" . strtolower($email) . "'"
 					);
 
-					$batch->add($users);
-					$batch->add($emails);
-					$session->executeAsync($batch);
-
 					$phrase = 'OK';
 					$ok = $row['username'] . ' verified successfully.';
+
+					$response = array("status" => $phrase);
+
+					if (strcmp($phrase, 'OK') === 0) {
+						$response['msg'] = $ok;
+					} else {
+						$response['error'] = $err;
+					}
+
+					$json = json_encode($response);
+
+					echo $json;
+
+					$batch->add($users);
+					$batch->add($emails);
+					$session->execute($batch);
+					$session->closeAsync();
+					die();
 				} else {
 					$phrase = 'ERROR';
 					$err = 'Incorrect email/key.';
