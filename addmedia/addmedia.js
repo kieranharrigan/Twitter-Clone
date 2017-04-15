@@ -3,7 +3,7 @@ function passToDB() {
         var formData = new FormData(form);
 
         $.ajax({
-                url: "/deposit/deposit.php/",
+                url: "/addmedia/index.php/",
                 type: "POST",
                 data: formData,
                 contentType: false,
