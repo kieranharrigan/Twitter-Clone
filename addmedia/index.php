@@ -4,7 +4,7 @@ session_start();
 $filename = basename($_FILES["content"]["name"]);
 $contents = '0x' . bin2hex(base64_encode(file_get_contents($_FILES["content"]["tmp_name"])));
 
-if ($filename !== NULL):
+if (strcmp($filename, '') !== 0):
 	$local = Cassandra::cluster()->build();
 	$keyspace = 'twitter';
 	$local_sess = $local->connect($keyspace);
