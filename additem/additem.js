@@ -6,8 +6,8 @@ function passToAdd() {
 
 	$.each(arr, function() {
 		if(this.name.localeCompare("media") === 0) {
-			this.value.replace(/\s/g,"");
-			json[this.name] = this.value.split(",");
+			var temp = this.value.replace(/\s/g,"");
+			json[this.name] = temp.split(",");
 		}
 		else {
 			json[this.name] = this.value;
