@@ -17,7 +17,7 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 
 	if ($parent !== NULL) {
 		$statement = new Cassandra\SimpleStatement(
-			"SELECT * FROM tweetsbyid WHERE parent='" . $parent . "'"
+			"SELECT * FROM tweetsbyparent WHERE parent='" . $parent . "'"
 		);
 
 		$future = $local_sess->executeAsync($statement);
@@ -72,6 +72,7 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 			//fclose($results_file);
 
 			$batch = new Cassandra\BatchStatement(Cassandra::BATCH_LOGGED);
+			$batch_local = new Cassandra\BatchStatement(Cassandra::BATCH_LOGGED);
 
 			$escape = str_replace("'", "''", $content);
 
@@ -79,7 +80,7 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 			//	"INSERT INTO tweets (id,content,sort,timestamp,username) VALUES ('" . strval($id) . "','" . $escape . "',1," . time() . ",'" . strtolower($_SESSION['username']) . "')"
 			//);
 
-			$query = "INSERT INTO tweetsbyid (id,content,sort,timestamp,username,parent) VALUES ('" . strval($id) . "','" . $escape . "',1," . time() . ",'" . strtolower($_SESSION['username']) . "','" . $parent . "',[";
+			$query = "(id,content,sort,timestamp,username,parent) VALUES ('" . strval($id) . "','" . $escape . "',1," . time() . ",'" . strtolower($_SESSION['username']) . "','" . $parent . "',[";
 			$first = true;
 			foreach ($media as $temp) {
 				if (!$first) {
@@ -95,7 +96,11 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 			$query .= "]";
 
 			$insertById = new Cassandra\SimpleStatement(
-				$query
+				"INSERT INTO tweetsbyid " . $query;
+			);
+
+			$insertByParent = new Cassandra\SimpleStatement(
+				"INSERT INTO tweetsbyparent " . $query;
 			);
 
 			$insertByUn = new Cassandra\SimpleStatement(
@@ -116,7 +121,9 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 			//$batch->add($insertById);
 			$batch->add($insertByUn);
 
-			$local_sess->execute($insertById);
+			$batch_local->add($insertById);
+			$batch_local->add($insertByParent);
+			$local_sess->execute($batch_local);
 			$local_sess->closeAsync();
 
 			$session->execute($batch);

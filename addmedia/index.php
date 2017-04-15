@@ -15,6 +15,7 @@ if (strcmp($filename, '') !== 0):
 		"INSERT INTO media (id,content) VALUES ('" . $id . "'," . $content . ");"
 	);
 	$local_sess->executeAsync($statement);
+	$local_sess->closeAsync();
 
 	$phrase = 'OK';
 	$response = array("status" => $phrase);

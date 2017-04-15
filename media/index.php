@@ -14,6 +14,7 @@ $statement = new Cassandra\SimpleStatement(
 );
 $future = $session->executeAsync($statement);
 $result = $future->get();
+$session->closeAsync();
 
 foreach ($result as $row) {
 	$hex = substr($row['content'], 2);
