@@ -15,7 +15,7 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 	$keyspace = 'twitter';
 	$session = $cluster->connect($keyspace);
 
-	if ($parent !== NULL) {
+	if ($parent !== '') {
 		$statement = new Cassandra\SimpleStatement(
 			"SELECT * FROM tweetsbyid WHERE id='" . $parent . "'"
 		);
@@ -25,7 +25,7 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 		$row = $result->first();
 	}
 
-	if ($row === NULL && $parent !== NULL) {
+	if ($row === NULL && $parent !== '') {
 		$response = array("status" => "error");
 		$response['error'] = 'Invalid parent id: ' . $parent;
 		$json = json_encode($response);
@@ -46,7 +46,7 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 		}
 		$query .= ")";
 
-		echo $query . PHP_EOL;
+//		echo $query . PHP_EOL;
 
 		$statement = new Cassandra\SimpleStatement(
 			$query
@@ -58,7 +58,7 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 
 		$numMedia = sizeof($media);
 
-		if ($row['count'] !== $numMedia) {
+		if ($row['count'] != $numMedia) {
 			$response = array("status" => "error");
 			$response['error'] = 'One or more media id(s) are invalid.';
 			$json = json_encode($response);
@@ -76,11 +76,7 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 
 			$escape = str_replace("'", "''", $content);
 
-			//$insertByTime = new Cassandra\SimpleStatement(
-			//	"INSERT INTO tweets (id,content,sort,timestamp,username) VALUES ('" . strval($id) . "','" . $escape . "',1," . time() . ",'" . strtolower($_SESSION['username']) . "')"
-			//);
-
-			$query = "(id,content,sort,timestamp,username,parent) VALUES ('" . strval($id) . "','" . $escape . "',1," . time() . ",'" . strtolower($_SESSION['username']) . "','" . $parent . "',[";
+			$query = "(id,content,sort,timestamp,username,parent,media) VALUES ('" . strval($id) . "','" . $escape . "',1," . time() . ",'" . strtolower($_SESSION['username']) . "','" . $parent . "',[";
 			$first = true;
 			foreach ($media as $temp) {
 				if (!$first) {
@@ -93,7 +89,7 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 					$first = false;
 				}
 			}
-			$query .= "]";
+			$query .= "])";
 
 			$insertById = new Cassandra\SimpleStatement(
 				"INSERT INTO tweetsbyid " . $query
@@ -122,8 +118,10 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 			$batch->add($insertByUn);
 
 			$batch_local->add($insertById);
-			$batch_local->add($insertByParent);
-			$local_sess->execute($batch_local);
+                        if($parent !== '') {
+			    $batch_local->add($insertByParent);
+			}
+                        $local_sess->execute($batch_local);
 			$local_sess->closeAsync();
 
 			$session->execute($batch);
@@ -150,7 +148,7 @@ else:
         <textarea id="tweet" type="text" name="content" maxlength="140" rows="6" cols="50" style="resize:none" autofocus></textarea><br>
         Characters left: <span id="rem">140</span><br>
         Parent ID: <input type="text" name="parent"><br>
-        Media ID(s) (comma separated): <input type="text" name="media">
+        Media IDs (comma separated): <input type="text" name="media">
         <input type="submit" value="submit">
     </form>
 
