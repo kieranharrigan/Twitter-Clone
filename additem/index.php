@@ -15,15 +15,17 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 	$keyspace = 'twitter';
 	$session = $cluster->connect($keyspace);
 
-	$statement = new Cassandra\SimpleStatement(
-		"SELECT * FROM tweetsbyid WHERE parent='" . $parent . "'"
-	);
+	if ($parent !== NULL) {
+		$statement = new Cassandra\SimpleStatement(
+			"SELECT * FROM tweetsbyid WHERE parent='" . $parent . "'"
+		);
 
-	$future = $local_sess->executeAsync($statement);
-	$result = $future->get();
-	$row = $result->first();
+		$future = $local_sess->executeAsync($statement);
+		$result = $future->get();
+		$row = $result->first();
+	}
 
-	if ($row === NULL) {
+	if ($row === NULL && $parent !== NULL) {
 		$response = array("status" => "error");
 		$response['error'] = 'Invalid parent id: ' . $parent;
 		$json = json_encode($response);
@@ -77,8 +79,23 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 			//	"INSERT INTO tweets (id,content,sort,timestamp,username) VALUES ('" . strval($id) . "','" . $escape . "',1," . time() . ",'" . strtolower($_SESSION['username']) . "')"
 			//);
 
+			$query = "INSERT INTO tweetsbyid (id,content,sort,timestamp,username,parent) VALUES ('" . strval($id) . "','" . $escape . "',1," . time() . ",'" . strtolower($_SESSION['username']) . "','" . $parent . "',[";
+			$first = true;
+			foreach ($media as $temp) {
+				if (!$first) {
+					$query .= ", ";
+				}
+
+				$query .= "'" . $temp . "'";
+
+				if ($first) {
+					$first = false;
+				}
+			}
+			$query .= "]";
+
 			$insertById = new Cassandra\SimpleStatement(
-				"INSERT INTO tweetsbyid (id,content,sort,timestamp,username) VALUES ('" . strval($id) . "','" . $escape . "',1," . time() . ",'" . strtolower($_SESSION['username']) . "')"
+				$query
 			);
 
 			$insertByUn = new Cassandra\SimpleStatement(
@@ -95,8 +112,8 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 
 			echo $json;
 
-			//$batch->add($insertByTime);
-			$batch->add($insertById);
+// MAKE SURE TO UNCOMMENT THIS LATER
+			//$batch->add($insertById);
 			$batch->add($insertByUn);
 
 			$local_sess->execute($insertById);
