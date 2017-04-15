@@ -5,8 +5,16 @@ function passToAdd() {
 	var json = {};
 
 	$.each(arr, function() {
-		json[this.name] = this.value;
+		if(this.name.localeCompare("media") === 0) {
+			json[this.name] = "[" + this.value + "]";
+		}
+		else {
+			json[this.name] = this.value;
+		}
 	});
+
+	console.log(json);
+	console.log(JSON.stringify(json));
 
 	$.ajax({
 		url: "/additem/index.php/",

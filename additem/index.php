@@ -72,6 +72,8 @@ else:
     <form id="input" oninput="updateCount();" onsubmit="event.preventDefault(); passToAdd();" autocomplete="off">
         <textarea id="tweet" type="text" name="content" maxlength="140" rows="6" cols="50" style="resize:none" autofocus></textarea><br>
         Characters left: <span id="rem">140</span><br>
+        Parent ID: <input type="text" name="password">
+        Media ID(s): <input type="text" name="password">
         <input type="submit" value="submit">
     </form>
 
