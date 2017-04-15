@@ -17,7 +17,7 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 
 	if ($parent !== NULL) {
 		$statement = new Cassandra\SimpleStatement(
-			"SELECT * FROM tweetsbyparent WHERE parent='" . $parent . "'"
+			"SELECT * FROM tweetsbyid WHERE id='" . $parent . "'"
 		);
 
 		$future = $local_sess->executeAsync($statement);
