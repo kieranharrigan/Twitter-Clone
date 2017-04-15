@@ -96,11 +96,11 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 			$query .= "]";
 
 			$insertById = new Cassandra\SimpleStatement(
-				"INSERT INTO tweetsbyid " . $query;
+				"INSERT INTO tweetsbyid " . $query
 			);
 
 			$insertByParent = new Cassandra\SimpleStatement(
-				"INSERT INTO tweetsbyparent " . $query;
+				"INSERT INTO tweetsbyparent " . $query
 			);
 
 			$insertByUn = new Cassandra\SimpleStatement(
