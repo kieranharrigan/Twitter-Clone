@@ -2,7 +2,7 @@
 session_start();
 
 $filename = basename($_FILES["content"]["name"]);
-$contents = '0x' . bin2hex(base64_encode(file_get_contents($_FILES["content"]["tmp_name"])));
+$content = '0x' . bin2hex(base64_encode(file_get_contents($_FILES["content"]["tmp_name"])));
 
 if (strcmp($filename, '') !== 0):
 	$local = Cassandra::cluster()->build();
@@ -12,10 +12,16 @@ if (strcmp($filename, '') !== 0):
 	$id = md5(uniqid($contents, true));
 
 	$statement = new Cassandra\SimpleStatement(
-		"INSERT INTO media (id,contents) VALUES ('" . $id . "'," . $contents . ");"
+		"INSERT INTO media (id,content) VALUES ('" . $id . "'," . $content . ");"
 	);
-	$session->executeAsync($statement);
+	$local_sess->executeAsync($statement);
 
+	$phrase = 'OK';
+	$response = array("status" => $phrase);
+	$response['id'] = strval($id);
+	$json = json_encode($response);
+
+	echo $json;
 else:
 ?>
 <html>
