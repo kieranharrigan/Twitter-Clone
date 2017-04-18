@@ -104,7 +104,7 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 			);
 
 			$insertLikes = new Cassandra\SimpleStatement(
-				"INSERT INTO likes (id,likes) VALUES ('" . strval($id) . "',0)"
+				"UPDATE likes set likes=likes+0 WHERE id='" . strval($id) . "'"
 			);
 
 			$phrase = 'OK';
