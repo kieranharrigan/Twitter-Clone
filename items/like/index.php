@@ -13,7 +13,7 @@ $keyspace = 'twitter';
 $session = $cluster->connect($keyspace);
 
 $statement = new Cassandra\SimpleStatement(
-	"SELECT * from likes WHERE id='" . $id . "'"
+	"SELECT * from rank WHERE id='" . $id . "'"
 );
 $future = $session->executeAsync($statement);
 $result = $future->get();
@@ -29,12 +29,12 @@ if ($row === NULL) {
 } else {
 	if ($like) {
 		$statement = new Cassandra\SimpleStatement(
-			"UPDATE likes SET likes=likes+1 WHERE id='" . $id . "'"
+			"UPDATE rank SET likes=likes+1 WHERE id='" . $id . "'"
 		);
 		$likes++;
 	} else {
 		$statement = new Cassandra\SimpleStatement(
-			"UPDATE likes SET likes=likes-1 WHERE id='" . $id . "'"
+			"UPDATE rank SET likes=likes-1 WHERE id='" . $id . "'"
 		);
 		$likes--;
 	}
