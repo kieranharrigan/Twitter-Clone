@@ -57,9 +57,9 @@ if ($row === NULL) {
 		"INSERT INTO tweetsbyrank (id,username,content,timestamp,sort,rank) VALUES ('" . $id . "','" . $username . "','" . $content . "'," . $timestamp . ",1," . ($likes + $retweets) . ")"
 	);
 
-        $session->executeAsync($statement);
+	$session->executeAsync($statement);
 	$session->execute($deleteRank);
-        $session->executeAsync($updateRank);
+	$session->executeAsync($updateRank);
 
 	$phrase = 'OK';
 	$response = array("status" => $phrase);
