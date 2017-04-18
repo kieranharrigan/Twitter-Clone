@@ -76,7 +76,7 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 
 			$escape = str_replace("'", "''", $content);
 
-			$query = "(id,content,sort,timestamp,username,parent,media) VALUES ('" . strval($id) . "','" . $escape . "',1," . time() . ",'" . strtolower($_SESSION['username']) . "','" . $parent . "',[";
+			$query = "(id,content,sort,timestamp,username,likes,parent,media) VALUES ('" . strval($id) . "','" . $escape . "',1," . time() . ",'" . strtolower($_SESSION['username']) . "',0,'" . $parent . "',[";
 			$first = true;
 			foreach ($media as $temp) {
 				if (!$first) {
@@ -100,7 +100,7 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 			);
 
 			$insertByUn = new Cassandra\SimpleStatement(
-				"INSERT INTO tweetsbyun (id,content,sort,timestamp,username) VALUES ('" . strval($id) . "','" . $escape . "',1," . time() . ",'" . strtolower($_SESSION['username']) . "')"
+				"INSERT INTO tweetsbyun (id,content,sort,timestamp,username,likes) VALUES ('" . strval($id) . "','" . $escape . "',1," . time() . ",'" . strtolower($_SESSION['username']) . "',0)"
 			);
 
 			$phrase = 'OK';
@@ -118,10 +118,10 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 			$batch->add($insertByUn);
 
 			$batch_local->add($insertById);
-                        if($parent !== '') {
-			    $batch_local->add($insertByParent);
+			if ($parent !== '') {
+				$batch_local->add($insertByParent);
 			}
-                        $local_sess->execute($batch_local);
+			$local_sess->execute($batch_local);
 			$local_sess->closeAsync();
 
 			$session->execute($batch);
