@@ -80,6 +80,7 @@ function doGet() {
 			$username = $row['username'];
 			$content = $row['content'];
 			$timestamp = strval($row['timestamp']);
+			$parent = $row['parent'];
 			$media = $row['media'];
 			$media_arr = array();
 			foreach ($media as $temp) {
@@ -102,7 +103,7 @@ function doGet() {
 	$response = array("status" => $phrase);
 
 	if (strcmp($phrase, 'OK') === 0) {
-		$response['item'] = array("id" => strval($id), "username" => $username, "content" => $content, "timestamp" => $timestamp, "media" => $media_arr);
+		$response['item'] = array("id" => strval($id), "username" => $username, "content" => $content, "timestamp" => $timestamp, "parent" => $parent, "media" => $media_arr);
 	} else {
 		$response['error'] = $err;
 	}
