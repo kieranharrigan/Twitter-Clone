@@ -4,6 +4,8 @@ $id = strtolower($_GET['id']);
 
 if ($like === NULL) {
 	$like = true;
+} elseif (strtolower($like) === 'false') {
+	$like = false;
 }
 
 $cluster = Cassandra::cluster()->withContactPoints('192.168.1.13')->build();
