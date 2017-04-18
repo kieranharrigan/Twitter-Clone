@@ -57,6 +57,8 @@ if ($row === NULL) {
 		"INSERT INTO tweetsbyrank (id,username,content,timestamp,sort,rank) VALUES ('" . $id . "','" . $username . "','" . $content . "'," . $timestamp . ",1," . $likes + $retweets . ")"
 	);
 
+	echo "INSERT INTO tweetsbyrank (id,username,content,timestamp,sort,rank) VALUES ('" . $id . "','" . $username . "','" . $content . "'," . $timestamp . ",1," . $likes + $retweets . ")";die();
+
 	$batch = new Cassandra\BatchStatement(Cassandra::BATCH_LOGGED);
 
 	$batch->add($statement);
