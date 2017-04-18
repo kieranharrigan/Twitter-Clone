@@ -71,7 +71,6 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 			//fwrite($results_file, strval($id) . ': "' . $content . '"' . PHP_EOL);
 			//fclose($results_file);
 
-			$batch = new Cassandra\BatchStatement(Cassandra::BATCH_LOGGED);
 			$batch_local = new Cassandra\BatchStatement(Cassandra::BATCH_LOGGED);
 
 			$escape = str_replace("'", "''", $content);
@@ -119,8 +118,7 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 
 // MAKE SURE TO UNCOMMENT THIS LATER
 			//$batch->add($insertById);
-			$batch->add($insertByUn);
-			$batch->add($insertLikes);
+			//$batch->add($insertLikes);
 
 			$batch_local->add($insertById);
 			if ($parent !== '') {
@@ -129,7 +127,8 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 			$local_sess->execute($batch_local);
 			$local_sess->closeAsync();
 
-			$session->execute($batch);
+			$session->execute($insertByUn);
+                        $session->execute($insertLikes);
 			$session->closeAsync();
 		}
 	}
