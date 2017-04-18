@@ -21,6 +21,8 @@ function doDelete() {
 		$result = $future->get();
 		$row = $result->first();
 
+		$media = $row['media'];
+
 		if ($row !== NULL) {
 			if (strcmp($_SESSION['username'], $row['username']) === 0) {
 				$statement = new Cassandra\SimpleStatement(
@@ -32,6 +34,27 @@ function doDelete() {
 
 				if ($row['[applied]']) {
 					$phrase = 'OK';
+					$query = "DELETE FROM media WHERE id in (";
+
+					$first = true;
+					foreach ($media as $temp) {
+						if (!$first) {
+							$query .= ", ";
+						}
+
+						$query .= "'" . $temp . "'";
+
+						if ($first) {
+							$first = false;
+						}
+					}
+					$query .= ")";
+
+					$statement = new Cassandra\SimpleStatement(
+						$query
+					);
+
+					$session->executeAsync($statement);
 				} else {
 					$phrase = 'ERROR';
 					$err = 'No tweet with id=' . $id;
