@@ -52,7 +52,7 @@ if ($row === NULL) {
 	$rank = $row['rank'];
 
 	$deleteRank = new Cassandra\SimpleStatement(
-		"DELETE from tweetsbyrank WHERE sort=1 AND rank=" . $rank . "AND id='" . $id . "'"
+		"DELETE from tweetsbyrank WHERE sort=1 AND rank=" . $rank . " AND id='" . $id . "'"
 	);
 	$updateRank = new Cassandra\SimpleStatement(
 		"INSERT INTO tweetsbyrank (id,username,content,timestamp,sort,rank) VALUES ('" . $id . "','" . $username . "','" . $content . "'," . $timestamp . ",1," . ($likes + $retweets) . ")"
