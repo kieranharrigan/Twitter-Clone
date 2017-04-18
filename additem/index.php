@@ -128,7 +128,7 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 			$local_sess->closeAsync();
 
 			$session->execute($insertByUn);
-                        $session->execute($insertLikes);
+			$session->execute($insertLikes);
 			$session->closeAsync();
 		}
 	}

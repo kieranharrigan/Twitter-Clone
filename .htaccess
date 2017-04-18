@@ -9,8 +9,8 @@ RewriteRule ^(.*[^/])$ /$1/
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^api/(.*)$ api/index.php [L]
 
-RewriteRule ^item/([a-zA-Z0-9]+)/?$ /item?id=$1
-RewriteRule ^item/([a-zA-Z0-9]+)/like/?$ /item/like?id=$1 [L,QSA]
+RewriteRule ^item/([a-zA-Z0-9]+)/?$ /items?id=$1
+RewriteRule ^item/([a-zA-Z0-9]+)/like/?$ /items/like?id=$1 [L,QSA]
 RewriteRule ^media/([a-zA-Z0-9]+)/?$ /media?id=$1
 RewriteRule ^user/([a-zA-Z0-9]+)/?$ /users?username=$1
 RewriteRule ^user/([a-zA-Z0-9]+)/followers/?$ /users/followers?username=$1 [L,QSA]
