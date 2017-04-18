@@ -18,6 +18,8 @@ $statement = new Cassandra\SimpleStatement(
 $future = $session->executeAsync($statement);
 $result = $future->get();
 $row = $result->first();
+$likes = $row['likes'];
+$retweets = $row['retweets'];
 
 if ($row === NULL) {
 	$phrase = 'ERROR';
@@ -29,13 +31,39 @@ if ($row === NULL) {
 		$statement = new Cassandra\SimpleStatement(
 			"UPDATE likes SET likes=likes+1 WHERE id='" . $id . "'"
 		);
+		$likes++;
 	} else {
 		$statement = new Cassandra\SimpleStatement(
 			"UPDATE likes SET likes=likes-1 WHERE id='" . $id . "'"
 		);
+		$likes--;
 	}
 
+	$selectRank = new Cassandra\SimpleStatement(
+		"SELECT * from tweetsbyrank WHERE id='" . $id . "'"
+	);
 	$future = $session->executeAsync($statement);
+	$result = $future->get();
+	$row = $result->first();
+
+	$content = $row['content'];
+	$timestamp = $row['timestamp'];
+	$username = $row['username'];
+
+	$deleteRank = new Cassandra\SimpleStatement(
+		"DELETE from tweetsbyrank WHERE id='" . $id . "'"
+	);
+	$updateRank = new Cassandra\SimpleStatement(
+		"INSERT INTO tweetsbyrank (id,username,content,timestamp,sort,rank) VALUES ('" . $id . "','" . $username . "','" . $content . "'," . $timestamp . ",1," . $likes + $retweets . ")"
+	);
+
+	$batch = new Cassandra\BatchStatement(Cassandra::BATCH_LOGGED);
+
+	$batch->add($statement);
+	$batch->add($deleteRank);
+	$batch->add($updateRank);
+
+	$future = $session->executeAsync($batch);
 	$result = $future->get();
 	$row = $result->first();
 

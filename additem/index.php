@@ -71,6 +71,7 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 			//fwrite($results_file, strval($id) . ': "' . $content . '"' . PHP_EOL);
 			//fclose($results_file);
 
+			$batch = new Cassandra\BatchStatement(Cassandra::BATCH_LOGGED);
 			$batch_local = new Cassandra\BatchStatement(Cassandra::BATCH_LOGGED);
 
 			$escape = str_replace("'", "''", $content);
@@ -102,6 +103,10 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 				"INSERT INTO tweetsbyun (id,content,sort,timestamp,username) VALUES ('" . strval($id) . "','" . $escape . "',1," . time() . ",'" . strtolower($_SESSION['username']) . "')"
 			);
 
+			$insertByRank = new Cassandra\SimpleStatement(
+				"INSERT INTO tweetsbyrank (id,content,sort,timestamp,username,rank) VALUES ('" . strval($id) . "','" . $escape . "',1," . time() . ",'" . strtolower($_SESSION['username']) . "',0)"
+			);
+
 			$insertLikes = new Cassandra\SimpleStatement(
 				"UPDATE likes set likes=likes+0 WHERE id='" . strval($id) . "'"
 			);
@@ -118,6 +123,8 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 
 // MAKE SURE TO UNCOMMENT THIS LATER
 			//$batch->add($insertById);
+			$batch->add($insertByUn);
+			$batch->add($insertByRank);
 			//$batch->add($insertLikes);
 
 			$batch_local->add($insertById);
@@ -127,7 +134,7 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 			$local_sess->execute($batch_local);
 			$local_sess->closeAsync();
 
-			$session->execute($insertByUn);
+			$session->execute($batch);
 			$session->execute($insertLikes);
 			$session->closeAsync();
 		}
