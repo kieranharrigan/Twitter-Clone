@@ -143,7 +143,7 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 				$batch_local->add($insertByParent);
 			}
 			$session->execute($batch_local);
-			$session->closeAsync();
+			//$session->closeAsync();
 
 			$session->execute($batch);
 			$session->execute($insertLikes);

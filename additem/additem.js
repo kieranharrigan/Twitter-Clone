@@ -19,9 +19,6 @@ function passToAdd() {
 		}
 	});
 
-	console.log(json);
-	console.log(JSON.stringify(json));
-
 	$.ajax({
 		url: "/additem/index.php/",
 		type: "POST",
