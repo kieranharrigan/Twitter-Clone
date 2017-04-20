@@ -1,5 +1,5 @@
 <?php
-//header('Content-Type: image/jpeg');
+header('Content-Type: image/jpeg');
 
 $id = $_GET['id'];
 //$fields = json_decode(file_get_contents('php://input'), true);
