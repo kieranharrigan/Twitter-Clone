@@ -106,6 +106,7 @@ function doDelete() {
 	}
 
 	$session->closeAsync();
+	$session1->closeAsync();
 
 	$response = array("status" => $phrase);
 

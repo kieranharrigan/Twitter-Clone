@@ -31,7 +31,7 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 			"SELECT * FROM tweetsbyid WHERE id='" . $parent . "'"
 		);
 
-		$future = $local_sess->executeAsync($statement);
+		$future = $session->executeAsync($statement);
 		$result = $future->get();
 		$row = $result->first();
 	}
@@ -63,7 +63,7 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 			$query
 		);
 
-		$future = $local_sess->executeAsync($statement);
+		$future = $session->executeAsync($statement);
 		$result = $future->get();
 		$row = $result->first();
 
@@ -142,8 +142,8 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 			if ($parent !== '') {
 				$batch_local->add($insertByParent);
 			}
-			$local_sess->execute($batch_local);
-			$local_sess->closeAsync();
+			$session->execute($batch_local);
+			$session->closeAsync();
 
 			$session->execute($batch);
 			$session->execute($insertLikes);

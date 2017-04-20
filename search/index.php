@@ -213,8 +213,8 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 
 		krsort($result_timesorted);
 
-		foreach ($result_timesorted as $key => $time) {	
-		foreach ($time as $row) {
+		foreach ($result_timesorted as $key => $time) {
+			foreach ($time as $row) {
 				array_push($items, array("id" => strval($row['id']), "username" => $row['username'], "content" => $row['content'], "timestamp" => strval($row['timestamp'])));
 			}
 		}
