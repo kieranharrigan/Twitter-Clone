@@ -203,11 +203,12 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 	if ($needstimesort) {
 		foreach ($result as $row) {
 			$timearr = $result_timesorted[$row['timestamp']];
-			echo $timearr;
 
 			if ($timearr === NULL) {
+				echo 'IT\'S NULL';
 				$result_timesorted[$row['timestamp']] = array($row);
 			} else {
+				echo 'PUSHED.'
 				array_push($timearr, $row);
 			}
 		}
