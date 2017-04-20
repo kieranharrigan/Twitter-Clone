@@ -22,6 +22,8 @@ function doDelete() {
 		$row = $result->first();
 
 		$media = $row['media'];
+		$timestamp = $row['timestamp'];
+		$username = $row['username'];
 
 		if ($row !== NULL) {
 			if (strcmp($_SESSION['username'], $row['username']) === 0) {
@@ -33,6 +35,33 @@ function doDelete() {
 				$row = $result->first();
 
 				if ($row['[applied]']) {
+					$ips = array('192.168.1.40', '192.168.1.41', '192.168.1.42', '192.168.1.43', '192.168.1.44', '192.168.1.46', '192.168.1.79', '192.168.1.66', '192.168.1.38', '192.168.1.80', '192.168.1.22', '192.168.1.25', '192.168.1.28');
+					$ip = array_rand($ips, 1);
+
+					$cluster1 = Cassandra::cluster()->withContactPoints($ips[$ip])->build();
+					$session1 = $cluster1->connect($keyspace);
+
+					$selectRank = new Cassandra\SimpleStatement(
+						"SELECT * from tweetsbyrank WHERE id='" . $id . "' ALLOW FILTERING"
+					);
+					$future = $session1->executeAsync($selectRank);
+					$result = $future->get();
+					$row = $result->first();
+
+					$rank = $row['rank'];
+
+					$delete_tweetsbyun = new Cassandra\SimpleStatement(
+						"DELETE FROM tweetsbyun WHERE username='" . $username . "' and timestamp=" . $timestamp . " and id='" . $id . "'"
+					);
+
+					$delete_tweetsbyrank = new Cassandra\SimpleStatement(
+						"DELETE FROM tweetsbyrank WHERE sort=1 and rank=" . $rank . " and id='" . $id . "'"
+					);
+
+					$delete_rank = new Cassandra\SimpleStatement(
+						"DELETE FROM rank WHERE id='" . $id . "'"
+					);
+
 					$phrase = 'OK';
 					$query = "DELETE FROM media WHERE id in (";
 
@@ -55,6 +84,9 @@ function doDelete() {
 					);
 
 					$session->executeAsync($statement);
+					$session1->executeAsync($delete_tweetsbyun);
+					$session1->executeAsync($delete_tweetsbyrank);
+					$session1->executeAsync($delete_rank);
 				} else {
 					$phrase = 'ERROR';
 					$err = 'No tweet with id=' . $id;
