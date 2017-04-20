@@ -7,7 +7,7 @@ $limit = $fields['limit'];
 $query = $fields['q'];
 $username = $fields['username'];
 $following = $fields['following'];
-//$filter = false;
+$filter = false;
 
 if ($following === NULL) {
 	$following = true;
@@ -68,6 +68,8 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 			}
 		}
 
+		array_push($who, $_SESSION['username']);
+
 	}
 
 	//$results_file = fopen('results.txt', 'a');
@@ -123,14 +125,14 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 
 		if ($following) {
 			if (strcmp($query, '') !== 0) {
-				$q = "SELECT * FROM tweetsbyun WHERE timestamp <= " . $timestamp . " AND content LIKE '%" . $query . "%' LIMIT " . $limit . " ALLOW FILTERING";
+				$q = "SELECT * FROM tweetsbyun WHERE timestamp <= " . $timestamp . " AND content LIKE '%" . $query . "%' ALLOW FILTERING";
 
 				// NEED TO GET FOLLOWING AND LOOP
 				$statement = new Cassandra\SimpleStatement(
 					$q
 				);
 
-				//$filter = true;
+				$filter = true;
 			} else {
 				$q = "SELECT * FROM tweetsbyun WHERE timestamp <= " . $timestamp . " AND username in (";
 
@@ -191,7 +193,7 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 	$items = array();
 	$item = array();
 
-//	$count = 0;
+	$count = 0;
 
 	$times = array();
 	$result_timesorted = array();
@@ -211,25 +213,24 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 
 		foreach ($result_timesorted as $key => $time) {
 			foreach ($time as $row) {
-				array_push($items, array("id" => strval($row['id']), "username" => $row['username'], "content" => $row['content'], "timestamp" => strval($row['timestamp'])));
+				if (!$filter) {
+					array_push($items, array("id" => strval($row['id']), "username" => $row['username'], "content" => $row['content'], "timestamp" => strval($row['timestamp'])));
+				} else {
+					if (array_search($row['username'], $who) !== false) {
+						array_push($items, array("id" => strval($row['id']), "username" => $row['username'], "content" => $row['content'], "timestamp" => strval($row['timestamp'])));
+						$count++;
+
+						if ($count >= $limit) {
+							break;
+						}
+					}
+				}
 			}
 		}
 	} else {
 
 		foreach ($result as $row) {
-			//if (!$filter) {
 			array_push($items, array("id" => strval($row['id']), "username" => $row['username'], "content" => $row['content'], "timestamp" => strval($row['timestamp'])));
-			//}
-			//else {
-			//	if (array_search($row['username'], $who) !== false) {
-			//		array_push($items, array("id" => strval($row['id']), "username" => $row['username'], "content" => $row['content'], "timestamp" => strval($row['timestamp'])));
-			//		$count++;
-
-			//		if ($count >= $limit) {
-			//					break;
-			//				}
-			//			}
-			//		}
 		}
 	}
 
