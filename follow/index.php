@@ -142,7 +142,7 @@ function doUnfollow($tofollow, $session) {
 
 			echo $json;
 
-			error_log($query, 3, "/var/tmp/unfollow.log");
+			error_log($query . "\n", 3, "/var/tmp/unfollow.log");
 
 			$batch->add($me);
 			$batch->add($them);
