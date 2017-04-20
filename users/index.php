@@ -3,7 +3,10 @@
 $username = strtolower($_GET['username']);
 
 if ($username !== NULL) {
-	$cluster = Cassandra::cluster()->build();
+	$ips = array('192.168.1.40', '192.168.1.41', '192.168.1.42', '192.168.1.43', '192.168.1.44', '192.168.1.46', '192.168.1.79', '192.168.1.66', '192.168.1.38', '192.168.1.80', '192.168.1.22', '192.168.1.25', '192.168.1.28');
+	$ip = array_rand($ips, 1);
+
+	$cluster = Cassandra::cluster()->withContactPoints($ips[$ip])->build();
 	$keyspace = 'twitter';
 	$session = $cluster->connect($keyspace);
 	$statement = new Cassandra\SimpleStatement(

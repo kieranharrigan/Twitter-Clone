@@ -32,19 +32,13 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 	$keyspace = 'twitter';
 	$session = $cluster->connect($keyspace);
 
-	$local = Cassandra::cluster()->build();
-	$keyspace = 'twitter';
-	$local_sess = $local->connect($keyspace);
-
 	if ($following) {
 		$statement = new Cassandra\SimpleStatement(
 			"SELECT * FROM users WHERE username='" . $_SESSION['username'] . "'"
 		);
-		$future = $local_sess->executeAsync($statement);
+		$future = $session->executeAsync($statement);
 		$result = $future->get();
 		$row = $result->first();
-
-		$local_sess->closeAsync();
 
 		$who = json_decode($row['following'], true)['following'];
 
