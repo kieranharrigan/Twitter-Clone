@@ -63,7 +63,7 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 			$query
 		);
 
-		$future = $session->executeAsync($statement);
+		$future = $local_sess->executeAsync($statement);
 		$result = $future->get();
 		$row = $result->first();
 
