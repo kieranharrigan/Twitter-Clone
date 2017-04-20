@@ -6,6 +6,14 @@ $content = $fields['content'];
 $parent = $fields['parent'];
 $media = $fields['media'];
 
+if ($parent === NULL) {
+	$parent = '';
+}
+
+if ($media === NULL) {
+	$media = array();
+}
+
 if ($content !== NULL && $_SESSION['username'] !== NULL):
 	$local = Cassandra::cluster()->build();
 	$keyspace = 'twitter';
