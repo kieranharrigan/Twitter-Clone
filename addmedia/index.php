@@ -10,7 +10,7 @@ if (strcmp($filename, '') !== 0):
 
 	$cluster = Cassandra::cluster()->withContactPoints($ips[$ip])->build();
 	$keyspace = 'twitter';
-	$local_sess = $local->connect($keyspace);
+	$local_sess = $cluster->connect($keyspace);
 
 	$id = md5(uniqid($content, true));
 
