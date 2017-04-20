@@ -54,12 +54,16 @@ function doFollow($tofollow, $session) {
 			$following_json = array("following" => $following);
 			$followers_json = array("followers" => $followers);
 
+			$query = "UPDATE users SET following='" . strval(json_encode($following_json)) . "' WHERE username='" . $_SESSION['username'] . "' AND email='" . $email . "'";
+
 			$me = new Cassandra\SimpleStatement(
-				"UPDATE users SET following='" . strval(json_encode($following_json)) . "' WHERE username='" . $_SESSION['username'] . "' AND email='" . $email . "'"
+				$query
 			);
 			$them = new Cassandra\SimpleStatement(
 				"UPDATE users SET followers='" . strval(json_encode($followers_json)) . "' WHERE username='" . $tofollow . "' AND email='" . $tofollow_email . "'"
 			);
+
+			error_log("FOLLOW-" . $tofollow . " " . $query . "\n", 3, "/var/tmp/unfollow.log");
 
 			$phrase = 'OK';
 			$response = array("status" => $phrase);
@@ -142,7 +146,7 @@ function doUnfollow($tofollow, $session) {
 
 			echo $json;
 
-			error_log($query . "\n", 3, "/var/tmp/unfollow.log");
+			error_log("UNFOLLOW-" . $tounfollow . " " . $query . "\n", 3, "/var/tmp/unfollow.log");
 
 			$batch->add($me);
 			$batch->add($them);
