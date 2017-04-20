@@ -12,7 +12,7 @@ if (strcmp($filename, '') !== 0):
 	$keyspace = 'twitter';
 	$local_sess = $local->connect($keyspace);
 
-	$id = md5(uniqid($contents, true));
+	$id = md5(uniqid($content, true));
 
 	$statement = new Cassandra\SimpleStatement(
 		"INSERT INTO media (id,content) VALUES ('" . $id . "'," . $content . ");"
