@@ -202,13 +202,21 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 
 	if ($needstimesort) {
 		foreach ($result as $row) {
-			$result_timesorted[$row['timestamp']] = $row;
+			$timearr = $result_timesorted[$row['timestamp']];
+
+			if ($timearr === NULL) {
+				$result_timesorted[$row['timestamp']] = array($row);
+			} else {
+				array_push($timearr, $row);
+			}
 		}
 
-		ksort($result_timesorted);
+		krsort($result_timesorted);
 
-		foreach ($result_timesorted as $row) {
-			array_push($items, array("id" => strval($row['id']), "username" => $row['username'], "content" => $row['content'], "timestamp" => strval($row['timestamp'])));
+		foreach ($result_timesorted as $time) {
+			foreach ($time as $row) {
+				array_push($items, array("id" => strval($row['id']), "username" => $row['username'], "content" => $row['content'], "timestamp" => strval($row['timestamp'])));
+			}
 		}
 	} else {
 
