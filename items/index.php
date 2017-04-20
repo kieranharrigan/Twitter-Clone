@@ -11,7 +11,10 @@ function doDelete() {
 	$id = $_GET['id'];
 
 	if ($id !== NULL) {
-		$cluster = Cassandra::cluster()->build();
+		$ips = array('192.168.1.40', '192.168.1.41', '192.168.1.42', '192.168.1.43', '192.168.1.44', '192.168.1.46', '192.168.1.79', '192.168.1.66', '192.168.1.38', '192.168.1.80', '192.168.1.22', '192.168.1.25', '192.168.1.28');
+		$ip = array_rand($ips, 1);
+
+		$cluster = Cassandra::cluster()->withContactPoints($ips[$ip])->build();
 		$keyspace = 'twitter';
 		$session = $cluster->connect($keyspace);
 		$statement = new Cassandra\SimpleStatement(
@@ -35,16 +38,13 @@ function doDelete() {
 				$row = $result->first();
 
 				if ($row['[applied]']) {
-					$ips = array('192.168.1.40', '192.168.1.41', '192.168.1.42', '192.168.1.43', '192.168.1.44', '192.168.1.46', '192.168.1.79', '192.168.1.66', '192.168.1.38', '192.168.1.80', '192.168.1.22', '192.168.1.25', '192.168.1.28');
-					$ip = array_rand($ips, 1);
-
-					$cluster1 = Cassandra::cluster()->withContactPoints($ips[$ip])->build();
+					$cluster1 = Cassandra::cluster()->build();
 					$session1 = $cluster1->connect($keyspace);
 
 					$selectRank = new Cassandra\SimpleStatement(
 						"SELECT * from tweetsbyrank WHERE id='" . $id . "' ALLOW FILTERING"
 					);
-					$future = $session1->executeAsync($selectRank);
+					$future = $session->executeAsync($selectRank);
 					$result = $future->get();
 					$row = $result->first();
 
@@ -83,10 +83,10 @@ function doDelete() {
 						$query
 					);
 
-					$session->executeAsync($statement);
-					$session1->executeAsync($delete_tweetsbyun);
-					$session1->executeAsync($delete_tweetsbyrank);
-					$session1->executeAsync($delete_rank);
+					$session1->executeAsync($statement);
+					$session->executeAsync($delete_tweetsbyun);
+					$session->executeAsync($delete_tweetsbyrank);
+					$session->executeAsync($delete_rank);
 				} else {
 					$phrase = 'ERROR';
 					$err = 'No tweet with id=' . $id;
@@ -122,7 +122,10 @@ function doGet() {
 	$id = $_GET['id'];
 
 	if ($id !== NULL) {
-		$cluster = Cassandra::cluster()->build();
+		$ips = array('192.168.1.40', '192.168.1.41', '192.168.1.42', '192.168.1.43', '192.168.1.44', '192.168.1.46', '192.168.1.79', '192.168.1.66', '192.168.1.38', '192.168.1.80', '192.168.1.22', '192.168.1.25', '192.168.1.28');
+		$ip = array_rand($ips, 1);
+
+		$cluster = Cassandra::cluster()->withContactPoints($ips[$ip])->build();
 		$keyspace = 'twitter';
 		$session = $cluster->connect($keyspace);
 		$statement = new Cassandra\SimpleStatement(
