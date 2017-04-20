@@ -10,6 +10,8 @@ $following = $fields['following'];
 //$filter = false;
 
 if ($following === NULL) {
+	$following = true;
+} elseif (strtolower($following) === 'false') {
 	$following = false;
 }
 
