@@ -7,7 +7,7 @@ $limit = $fields['limit'];
 $query = $fields['q'];
 $username = $fields['username'];
 $following = $fields['following'];
-$filter = false;
+//$filter = false;
 
 if ($following === NULL) {
 	$following = false;
@@ -123,6 +123,8 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 			}
 		}
 	} else {
+		$needstimesort = true;
+
 		if ($following) {
 			if (strcmp($query, '') !== 0) {
 				$q = "SELECT * FROM tweetsbyun WHERE timestamp <= " . $timestamp . " AND content LIKE '%" . $query . "%' ALLOW FILTERING";
@@ -132,7 +134,7 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 					$q
 				);
 
-				$filter = true;
+				//$filter = true;
 			} else {
 				$q = "SELECT * FROM tweetsbyun WHERE timestamp <= " . $timestamp . " AND username in (";
 
@@ -193,20 +195,37 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 	$items = array();
 	$item = array();
 
-	$count = 0;
+//	$count = 0;
 
-	foreach ($result as $row) {
-		if (!$filter) {
+	$times = array();
+	$result_timesorted = array();
+
+	if ($needstimesort) {
+		foreach ($result as $row) {
+			$result_timesorted[$row['timestamp']] = $row;
+		}
+
+		ksort($result_timesorted);
+
+		foreach ($result_timesorted as $row) {
 			array_push($items, array("id" => strval($row['id']), "username" => $row['username'], "content" => $row['content'], "timestamp" => strval($row['timestamp'])));
-		} else {
-			if (array_search($row['username'], $who) !== false) {
-				array_push($items, array("id" => strval($row['id']), "username" => $row['username'], "content" => $row['content'], "timestamp" => strval($row['timestamp'])));
-				$count++;
+		}
+	} else {
 
-				if ($count >= $limit) {
-					break;
-				}
-			}
+		foreach ($result as $row) {
+			//if (!$filter) {
+			array_push($items, array("id" => strval($row['id']), "username" => $row['username'], "content" => $row['content'], "timestamp" => strval($row['timestamp'])));
+			//}
+			//else {
+			//	if (array_search($row['username'], $who) !== false) {
+			//		array_push($items, array("id" => strval($row['id']), "username" => $row['username'], "content" => $row['content'], "timestamp" => strval($row['timestamp'])));
+			//		$count++;
+
+			//		if ($count >= $limit) {
+			//					break;
+			//				}
+			//			}
+			//		}
 		}
 	}
 
