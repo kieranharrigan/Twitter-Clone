@@ -43,6 +43,7 @@ if ($row === NULL) {
 		$statement = new Cassandra\SimpleStatement(
 			"UPDATE rank SET likes=likes-1 WHERE id='" . $id . "'"
 		);
+	}
 
 	$updateRank = new Cassandra\SimpleStatement(
 		"UPDATE tweetsbyrank SET rank=" . ($likes + $retweets) . " WHERE id='" . $id . "'"
