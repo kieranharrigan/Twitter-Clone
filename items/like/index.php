@@ -29,6 +29,10 @@ if ($row === NULL) {
 	$response = array("status" => $phrase);
 	$err = 'No tweet found with id: ' . $id . '.';
 	$response['error'] = $err;
+
+	$json = json_encode($response);
+
+	echo $json;
 } else {
 	if ($like) {
 		$statement = new Cassandra\SimpleStatement(
@@ -61,17 +65,17 @@ if ($row === NULL) {
 		"INSERT INTO tweetsbyrank (id,username,content,timestamp,sort,rank) VALUES ('" . $id . "','" . $username . "','" . $content . "'," . $timestamp . ",1," . ($likes + $retweets) . ")"
 	);
 
+	$phrase = 'OK';
+	$response = array("status" => $phrase);
+
+	$json = json_encode($response);
+
+	echo $json;
+
 	$session->executeAsync($statement);
 	$session->execute($deleteRank);
 	$session->executeAsync($updateRank);
-
-	$phrase = 'OK';
-	$response = array("status" => $phrase);
 }
 
 $session->closeAsync();
-
-$json = json_encode($response);
-
-echo $json;
 ?>
