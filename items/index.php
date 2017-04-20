@@ -38,9 +38,6 @@ function doDelete() {
 				$row = $result->first();
 
 				if ($row['[applied]']) {
-					$cluster1 = Cassandra::cluster()->build();
-					$session1 = $cluster1->connect($keyspace);
-
 					$selectRank = new Cassandra\SimpleStatement(
 						"SELECT * from tweetsbyrank WHERE id='" . $id . "' ALLOW FILTERING"
 					);
@@ -83,7 +80,7 @@ function doDelete() {
 						$query
 					);
 
-					$session1->executeAsync($statement);
+					$session->executeAsync($statement);
 					$session->executeAsync($delete_tweetsbyun);
 					$session->executeAsync($delete_tweetsbyrank);
 					$session->executeAsync($delete_rank);
@@ -106,7 +103,6 @@ function doDelete() {
 	}
 
 	$session->closeAsync();
-	$session1->closeAsync();
 
 	$response = array("status" => $phrase);
 
