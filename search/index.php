@@ -30,11 +30,11 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 	$ips = array('192.168.1.40', '192.168.1.41', '192.168.1.42', '192.168.1.43', '192.168.1.44', '192.168.1.46', '192.168.1.79', '192.168.1.66', '192.168.1.38', '192.168.1.80', '192.168.1.22', '192.168.1.25', '192.168.1.28');
 	$ip = array_rand($ips, 1);
 
-	$cluster = Cassandra::cluster()->withContactPoints($ips[$ip])->withIOThreads(5)->build();
+	$cluster = Cassandra::cluster()->withContactPoints($ips[$ip])->build();
 	$keyspace = 'twitter';
 	$session = $cluster->connect($keyspace);
 
-	$cluster1 = Cassandra::cluster()->withContactPoints('192.168.1.10')->withIOThreads(5)->build();
+	$cluster1 = Cassandra::cluster()->withContactPoints('192.168.1.10')->build();
 	$local = $cluster1->connect($keyspace);
 
 	if ($following) {
