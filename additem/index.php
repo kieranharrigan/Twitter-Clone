@@ -56,7 +56,7 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 				}
 			} else {
 				unset($media[array_search($id, $media)]);
-				error_log("Received id='', removed from media array." . PHP_EOL, 3, "/var/tmp/my-errors.log");
+				//error_log("Received id='', removed from media array." . PHP_EOL, 3, "/var/tmp/my-errors.log");
 			}
 		}
 		$query .= ")";
@@ -67,7 +67,7 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 			$query
 		);
 
-		error_log($query . PHP_EOL, 3, "/var/tmp/my-errors.log");
+		//error_log($query . PHP_EOL, 3, "/var/tmp/my-errors.log");
 
 		$future = $local->executeAsync($statement);
 		$result = $future->get();
