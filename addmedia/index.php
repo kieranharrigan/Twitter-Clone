@@ -13,14 +13,14 @@ if (strcmp($filename, '') !== 0):
 	$keyspace = 'twitter';
 	$local_sess = $cluster->connect($keyspace);
 
+	$id = md5(uniqid($content, true));
+
 	$phrase = 'OK';
 	$response = array("status" => $phrase);
 	$response['id'] = strval($id);
 	$json = json_encode($response);
 
 	echo $json;
-
-	$id = md5(uniqid($content, true));
 
 	$statement = new Cassandra\SimpleStatement(
 		"INSERT INTO media (id,content) VALUES ('" . $id . "'," . $content . ");"
