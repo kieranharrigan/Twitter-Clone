@@ -34,7 +34,7 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 	$keyspace = 'twitter';
 	$session = $cluster->connect($keyspace);
 
-	$cluster1 = Cassandra::cluster()->withContactPoints('192.168.1.10')->build();
+	$cluster1 = Cassandra::cluster()->withContactPoints('192.168.1.10')->withIOThreads(5)->build();
 	$local = $cluster1->connect($keyspace);
 
 	if ($following) {

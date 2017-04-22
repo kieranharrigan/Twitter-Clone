@@ -9,7 +9,7 @@ if (strcmp($filename, '') !== 0):
 	// $ip = array_rand($ips, 1);
 
 	// $cluster = Cassandra::cluster()->withContactPoints($ips[$ip])->build();
-	$cluster = Cassandra::cluster()->withContactPoints('192.168.1.10')->build();
+	$cluster = Cassandra::cluster()->withContactPoints('192.168.1.10')->withIOThreads(5)->build();
 	$keyspace = 'twitter';
 	$local_sess = $cluster->connect($keyspace);
 

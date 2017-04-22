@@ -22,7 +22,7 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 	$keyspace = 'twitter';
 	$session = $cluster->connect($keyspace);
 
-	$cluster1 = Cassandra::cluster()->withContactPoints('192.168.1.10')->build();
+	$cluster1 = Cassandra::cluster()->withContactPoints('192.168.1.10')->withIOThreads(5)->build();
 	$local = $cluster1->connect($keyspace);
 
 	if ($parent !== '') {
@@ -44,17 +44,20 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 		$query = "SELECT COUNT(*) FROM media WHERE id in (";
 		$first = true;
 		foreach ($media as $id) {
-if ($id !== '') {
-			if (!$first) {
-				$query .= ", ";
-			}
+			if ($id !== '') {
+				if (!$first) {
+					$query .= ", ";
+				}
 
-			$query .= "'" . $id . "'";
+				$query .= "'" . $id . "'";
 
-			if ($first) {
-				$first = false;
+				if ($first) {
+					$first = false;
+				}
+			} else {
+				unset($media[array_search($id, $media)]);
+				error_log("Received id='', removed from media array.", 3, "/var/tmp/my-errors.log");
 			}
-}
 		}
 		$query .= ")";
 
@@ -64,7 +67,7 @@ if ($id !== '') {
 			$query
 		);
 
-error_log($query . PHP_EOL, 3, "/var/tmp/my-errors.log");
+		//error_log($query . PHP_EOL, 3, "/var/tmp/my-errors.log");
 
 		$future = $local->executeAsync($statement);
 		$result = $future->get();
@@ -144,14 +147,14 @@ error_log($query . PHP_EOL, 3, "/var/tmp/my-errors.log");
 			$batch_local->add($insertById);
 			if ($parent !== '') {
 				//$batch_local->add($insertByParent);
-                                $local->executeAsync($insertByParent);
+				$local->executeAsync($insertByParent);
 			}
 			//$local->execute($batch_local);
 			//$session->closeAsync();
-$local->executeAsync($insertById);
+			$local->executeAsync($insertById);
 
 			$session->executeAsync($insertByUn);
-                        $session->executeAsync($insertByRank);
+			$session->executeAsync($insertByRank);
 			$session->executeAsync($insertLikes);
 			$session->closeAsync();
 			$local->closeAsync();
