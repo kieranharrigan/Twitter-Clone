@@ -5,12 +5,20 @@ $filename = basename($_FILES["content"]["name"]);
 $content = '0x' . bin2hex(base64_encode(file_get_contents($_FILES["content"]["tmp_name"])));
 
 if (strcmp($filename, '') !== 0):
-	$ips = array('192.168.1.40', '192.168.1.41', '192.168.1.42', '192.168.1.43', '192.168.1.44', '192.168.1.46', '192.168.1.79', '192.168.1.66', '192.168.1.38', '192.168.1.80', '192.168.1.22', '192.168.1.25', '192.168.1.28');
-	$ip = array_rand($ips, 1);
+	// $ips = array('192.168.1.40', '192.168.1.41', '192.168.1.42', '192.168.1.43', '192.168.1.44', '192.168.1.46', '192.168.1.79', '192.168.1.66', '192.168.1.38', '192.168.1.80', '192.168.1.22', '192.168.1.25', '192.168.1.28');
+	// $ip = array_rand($ips, 1);
 
-	$cluster = Cassandra::cluster()->withContactPoints($ips[$ip])->build();
+	// $cluster = Cassandra::cluster()->withContactPoints($ips[$ip])->build();
+	$cluster = Cassandra::cluster()->withContactPoints('192.168.1.10')->build();
 	$keyspace = 'twitter';
 	$local_sess = $cluster->connect($keyspace);
+
+	$phrase = 'OK';
+	$response = array("status" => $phrase);
+	$response['id'] = strval($id);
+	$json = json_encode($response);
+
+	echo $json;
 
 	$id = md5(uniqid($content, true));
 
@@ -19,13 +27,6 @@ if (strcmp($filename, '') !== 0):
 	);
 	$local_sess->executeAsync($statement);
 	$local_sess->closeAsync();
-
-	$phrase = 'OK';
-	$response = array("status" => $phrase);
-	$response['id'] = strval($id);
-	$json = json_encode($response);
-
-	echo $json;
 else:
 ?>
 <html>

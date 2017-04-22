@@ -34,11 +34,14 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 	$keyspace = 'twitter';
 	$session = $cluster->connect($keyspace);
 
+	$cluster1 = Cassandra::cluster()->withContactPoints('192.168.1.10')->build();
+	$local = $cluster1->connect($keyspace);
+
 	if ($following) {
 		$statement = new Cassandra\SimpleStatement(
 			"SELECT * FROM users WHERE username='" . $_SESSION['username'] . "'"
 		);
-		$future = $session->executeAsync($statement);
+		$future = $local->executeAsync($statement);
 		$result = $future->get();
 		$row = $result->first();
 
@@ -245,6 +248,7 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
 	//}
 
 	$session->closeAsync();
+	$local->closeAsync();
 
 	$json = json_encode($response);
 
