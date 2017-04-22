@@ -44,6 +44,7 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 		$query = "SELECT COUNT(*) FROM media WHERE id in (";
 		$first = true;
 		foreach ($media as $id) {
+if ($id !== '') {
 			if (!$first) {
 				$query .= ", ";
 			}
@@ -53,6 +54,7 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 			if ($first) {
 				$first = false;
 			}
+}
 		}
 		$query .= ")";
 
@@ -61,6 +63,8 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 		$statement = new Cassandra\SimpleStatement(
 			$query
 		);
+
+error_log($query . PHP_EOL, 3, "/var/tmp/my-errors.log");
 
 		$future = $local->executeAsync($statement);
 		$result = $future->get();
@@ -139,13 +143,16 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 
 			$batch_local->add($insertById);
 			if ($parent !== '') {
-				$batch_local->add($insertByParent);
+				//$batch_local->add($insertByParent);
+                                $local->executeAsync($insertByParent);
 			}
-			$local->execute($batch_local);
+			//$local->execute($batch_local);
 			//$session->closeAsync();
+$local->executeAsync($insertById);
 
-			$session->execute($batch);
-			$session->execute($insertLikes);
+			$session->executeAsync($insertByUn);
+                        $session->executeAsync($insertByRank);
+			$session->executeAsync($insertLikes);
 			$session->closeAsync();
 			$local->closeAsync();
 		}
