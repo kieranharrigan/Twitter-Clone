@@ -28,6 +28,9 @@ if ($row === NULL) {
 	$likes = 0;
 	$retweets = 0;
 }
+if ($retweets === NULL) {
+	$retweets = 0;
+}
 
 // if ($row === NULL) {
 // 	$phrase = 'ERROR';
