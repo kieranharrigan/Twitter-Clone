@@ -25,40 +25,45 @@ $likes = $row['likes'];
 $retweets = $row['retweets'];
 
 if ($row === NULL) {
-	$phrase = 'ERROR';
-	$response = array("status" => $phrase);
-	$err = 'No tweet found with id: ' . $id . '.';
-	$response['error'] = $err;
-
-	$json = json_encode($response);
-
-	echo $json;
-} else {
-	if ($like) {
-		$statement = new Cassandra\SimpleStatement(
-			"UPDATE rank SET likes=likes+1 WHERE id='" . $id . "'"
-		);
-		$likes += 1;
-	} else {
-		$statement = new Cassandra\SimpleStatement(
-			"UPDATE rank SET likes=likes-1 WHERE id='" . $id . "'"
-		);
-	}
-
-	$updateRank = new Cassandra\SimpleStatement(
-		"UPDATE tweetsbyrank SET rank=" . ($likes + $retweets) . " WHERE id='" . $id . "'"
-	);
-
-	$phrase = 'OK';
-	$response = array("status" => $phrase);
-
-	$json = json_encode($response);
-
-	echo $json;
-
-	$session->executeAsync($statement);
-	$session->executeAsync($updateRank);
+	$likes = 0;
+	$retweets = 0;
 }
+
+// if ($row === NULL) {
+// 	$phrase = 'ERROR';
+// 	$response = array("status" => $phrase);
+// 	$err = 'No tweet found with id: ' . $id . '.';
+// 	$response['error'] = $err;
+
+// 	$json = json_encode($response);
+
+// 	echo $json;
+// } else {
+if ($like) {
+	$statement = new Cassandra\SimpleStatement(
+		"UPDATE rank SET likes=likes+1 WHERE id='" . $id . "'"
+	);
+	$likes += 1;
+} else {
+	$statement = new Cassandra\SimpleStatement(
+		"UPDATE rank SET likes=likes-1 WHERE id='" . $id . "'"
+	);
+}
+
+$updateRank = new Cassandra\SimpleStatement(
+	"UPDATE tweetsbyrank SET rank=" . ($likes + $retweets) . " WHERE id='" . $id . "'"
+);
+
+$phrase = 'OK';
+$response = array("status" => $phrase);
+
+$json = json_encode($response);
+
+echo $json;
+
+$session->executeAsync($statement);
+$session->executeAsync($updateRank);
+// }
 
 $session->closeAsync();
 ?>
