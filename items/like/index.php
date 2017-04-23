@@ -57,16 +57,16 @@ $updateRank = new Cassandra\SimpleStatement(
 	"UPDATE tweetsbyrank SET rank=" . ($likes + $retweets) . " WHERE id='" . $id . "'"
 );
 
+$session->executeAsync($statement);
+$session->executeAsync($updateRank);
+// }
+
+$session->closeAsync();
+
 $phrase = 'OK';
 $response = array("status" => $phrase);
 
 $json = json_encode($response);
 
 echo $json;
-
-$session->executeAsync($statement);
-$session->executeAsync($updateRank);
-// }
-
-$session->closeAsync();
 ?>

@@ -128,16 +128,6 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 				"UPDATE rank SET likes=likes+0, retweets=retweets+0 WHERE id='" . strval($id) . "'"
 			);
 
-			$phrase = 'OK';
-			$response = array("status" => $phrase);
-
-			if (strcmp($phrase, 'OK') === 0) {
-				$response['id'] = strval($id);
-			}
-			$json = json_encode($response);
-
-			echo $json;
-
 // MAKE SURE TO UNCOMMENT THIS LATER
 			//$batch->add($insertById);
 			$batch->add($insertByUn);
@@ -158,6 +148,16 @@ if ($content !== NULL && $_SESSION['username'] !== NULL):
 			$session->executeAsync($insertLikes);
 			$session->closeAsync();
 			$local->closeAsync();
+
+			$phrase = 'OK';
+			$response = array("status" => $phrase);
+
+			if (strcmp($phrase, 'OK') === 0) {
+				$response['id'] = strval($id);
+			}
+			$json = json_encode($response);
+
+			echo $json;
 		}
 	}
 	//comment

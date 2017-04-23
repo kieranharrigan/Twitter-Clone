@@ -15,18 +15,18 @@ if (strcmp($filename, '') !== 0):
 
 	$id = md5(uniqid($content, true));
 
+	$statement = new Cassandra\SimpleStatement(
+		"INSERT INTO media (id,content) VALUES ('" . $id . "'," . $content . ");"
+	);
+	$local_sess->executeAsync($statement);
+	$local_sess->closeAsync();
+
 	$phrase = 'OK';
 	$response = array("status" => $phrase);
 	$response['id'] = strval($id);
 	$json = json_encode($response);
 
 	echo $json;
-
-	$statement = new Cassandra\SimpleStatement(
-		"INSERT INTO media (id,content) VALUES ('" . $id . "'," . $content . ");"
-	);
-	$local_sess->executeAsync($statement);
-	$local_sess->closeAsync();
 else:
 ?>
 <html>

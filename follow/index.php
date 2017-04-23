@@ -139,13 +139,6 @@ function doUnfollow($tofollow, $session) {
 				"UPDATE users SET followers='" . strval(json_encode($followers_json)) . "' WHERE username='" . $tounfollow . "' AND email='" . $tounfollow_email . "'"
 			);
 
-			$phrase = 'OK';
-			$response = array("status" => $phrase);
-
-			$json = json_encode($response);
-
-			echo $json;
-
 //			error_log("UNFOLLOW-" . $tounfollow . " " . $query . "\n", 3, "/var/tmp/unfollow.log");
 
 			$batch->add($me);
@@ -153,6 +146,13 @@ function doUnfollow($tofollow, $session) {
 			$session->execute($batch);
 
 			$session->closeAsync();
+
+			$phrase = 'OK';
+			$response = array("status" => $phrase);
+
+			$json = json_encode($response);
+
+			echo $json;
 			die();
 		}
 	}
