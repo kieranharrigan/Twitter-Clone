@@ -1,9 +1,9 @@
 <?php
 session_start();
-$phrase = 'ERROR';
+$phrase = 'OK';
 
-if($_SESSION['username'] !== NULL) {
-	$phrase = 'OK';
+if ($_SESSION['username'] !== NULL) {
+//	$phrase = 'OK';
 	session_unset();
 	session_destroy();
 }
