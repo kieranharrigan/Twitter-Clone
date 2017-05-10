@@ -12,6 +12,10 @@ function passToAdd() {
 		data: JSON.stringify(json),
 		success: function(reply) {
 			document.write(reply);
+
+			//if(reply.status) {
+				window.location.replace("/additem");
+			//}
 		}
 	});
 }
