@@ -29,7 +29,7 @@ function passToAdd() {
 			var json = JSON.parse(reply);
 
 			if(json.status.localeCompare("error") == 0) {
-				history.back();
+				history.go(-1);
 			}
 		}
 	});
