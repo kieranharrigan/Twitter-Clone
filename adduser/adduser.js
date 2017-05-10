@@ -12,6 +12,15 @@ function passToAdd() {
 		data: JSON.stringify(json),
 		success: function(reply) {
 			document.write(reply);
+
+			var json = JSON.parse(reply);
+
+			if(json.status.localeCompare("OK") == 0) {
+				window.location.replace("/additem");
+			}
+			else {
+				window.location.replace("/adduser");
+			}
 		}
 	});
 }
