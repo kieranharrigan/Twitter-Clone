@@ -25,6 +25,12 @@ function passToAdd() {
 		data: JSON.stringify(json),
 		success: function(reply) {
 			document.write(reply);
+
+			var json = JSON.parse(reply);
+
+			if(json.status.localeCompare("error") == 0) {
+				history.back();
+			}
 		}
 	});
 }
