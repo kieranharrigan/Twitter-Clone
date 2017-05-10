@@ -107,7 +107,7 @@ else:
 		<li class="active"><a href="/adduser">Create Account <span class="sr-only">(current)</span></a></li>
         <li><a href="/login">Login</a></li>
 		<?php else: ?>
-		<li>Hello, <?php echo $_SESSION['username']; ?></li>
+		<li><a>Hello, <?php echo $_SESSION['username']; ?></a></li>
 	    <li><a href="/logout">Logout</a></li>
 	<?php endif;?>
       </ul>
