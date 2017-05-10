@@ -104,7 +104,7 @@ else:
 
       <ul class="nav navbar-nav navbar-right">
         <li class="active"><a href="/adduser">Create Account <span class="sr-only">(current)</span></a></li>
-		<?php if ($_SESSION['username'] !== NULL): ?>
+		<?php if ($_SESSION['username'] === NULL): ?>
         <li><a href="/login">Login</a></li>
 		<?php else: ?>
 	    <li><a href="/logout">Logout</a></li>
@@ -114,12 +114,33 @@ else:
   </div><!-- /.container-fluid -->
 </nav>
 
+<div class="container">
 	<form id="input" onsubmit="event.preventDefault(); passToAdd();" autocomplete="off" class="form-horizontal">
-		Username: <input type="text" name="username" autofocus><br>
-		Password: <input type="text" name="password"><br>
-                Email: <input type="text" name="email"><br>
-		<input type="submit" value="submit">
+	    <div class="form-group">
+			<label class="control-label col-sm-2">Username:</label>
+			<div class="col-sm-10">
+				<input class="form-control" type="text" name="username" autofocus>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-2">Password:</label>
+			<div class="col-sm-10">
+				<input class="form-control" type="text" name="password">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-2">Email:</label>
+			<div class="col-sm-10">
+				<input class="form-control" type="text" name="email">
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-10">
+				<button type="submit" class="btn btn-default">Submit</button>
+			</div>
+		</div>
 	</form>
+</div>
 
 	<div id="result"></div>
 </body>
