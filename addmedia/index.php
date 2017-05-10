@@ -85,7 +85,7 @@ else:
 			<label class="control-label col-sm-2">Media:</label>
 			<div class="col-sm-10">
         		<label class="btn btn-primary" for="my-file-selector">
-    			<input id="my-file-selector" type="file" name="content" style="display:none;" onchange="$('#path').html($(this).val());">
+    			<input id="my-file-selector" type="file" name="content" style="display:none;" onchange="$('#path').html($(this).val().split('\\').pop());">
     			Browse
 				</label>
 				<span class='label label-info' id="path"></span>
