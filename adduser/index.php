@@ -119,19 +119,19 @@ else:
 	    <div class="form-group">
 			<label class="control-label col-sm-2">Username:</label>
 			<div class="col-sm-10">
-				<input class="form-control" type="text" name="username" autofocus>
+				<input class="form-control" type="text" name="username" placeholder="Enter username" autofocus>
 			</div>
 		</div>
 		<div class="form-group">
 			<label class="control-label col-sm-2">Password:</label>
 			<div class="col-sm-10">
-				<input class="form-control" type="text" name="password">
+				<input class="form-control" type="password" name="password" placeholder="Enter password">
 			</div>
 		</div>
 		<div class="form-group">
 			<label class="control-label col-sm-2">Email:</label>
 			<div class="col-sm-10">
-				<input class="form-control" type="text" name="email">
+				<input class="form-control" type="text" name="email" placeholder="Enter email">
 			</div>
 		</div>
 		<div class="form-group">
