@@ -23,7 +23,7 @@ if ($limit === NULL) {
 	$limit = 25;
 }
 
-if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL):
+if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL && $_SERVER['REQUEST_METHOD'] === 'POST'):
 
 //header('Content-Type: application/json');
 
