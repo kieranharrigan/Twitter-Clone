@@ -103,10 +103,11 @@ else:
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
-        <li class="active"><a href="/adduser">Create Account <span class="sr-only">(current)</span></a></li>
 		<?php if ($_SESSION['username'] === NULL): ?>
+		<li class="active"><a href="/adduser">Create Account <span class="sr-only">(current)</span></a></li>
         <li><a href="/login">Login</a></li>
 		<?php else: ?>
+		<li>Hello, <?php echo $_SESSION['username']; ?></li>
 	    <li><a href="/logout">Logout</a></li>
 	<?php endif;?>
       </ul>
