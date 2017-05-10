@@ -10,8 +10,11 @@ function passToAdd() {
 		url: "/login/index.php/",
 		type: "POST",
 		data: JSON.stringify(json),
+		dataType: json,
 		success: function(reply) {
 			document.write(reply);
+
+			console.log();
 
 			if(reply.status.localeCompare("OK") == 0) {
 				window.location.replace("/additem");
