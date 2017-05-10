@@ -27,6 +27,7 @@ function passToAdd() {
 			document.write(reply);
 
 			var json = JSON.parse(reply);
+							console.log("HEY");
 
 			if(json.status.localeCompare("error") == 0) {
 				console.log("HI");
