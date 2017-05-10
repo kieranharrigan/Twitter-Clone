@@ -27,7 +27,6 @@ if ($username !== NULL && $password !== NULL):
 		} else {
 			if (strcmp($row['password'], $password) === 0) {
 				$phrase = 'OK';
-				session_start();
 				$_SESSION['username'] = strtolower($username);
 			} else {
 				$phrase = 'ERROR';
@@ -76,7 +75,7 @@ else:
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">Twitter Clone</a>
+      <a class="navbar-brand">Twitter Clone</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
