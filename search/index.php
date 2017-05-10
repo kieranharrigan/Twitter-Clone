@@ -317,37 +317,37 @@ else:
 <div class="container">
     <form id="input" onsubmit="event.preventDefault(); passToAdd();" autocomplete="off" class="form-horizontal">
     	<div class="form-group">
-			<label class="control-label col-sm-2">Tweets from this time and earlier:</label>
-			<div class="col-sm-10">
+			<label class="control-label col-sm-4">Tweets from this time and earlier:</label>
+			<div class="col-sm-7">
 				<input class="form-control" type="text" name="timestamp" value="<?php echo time() ?>" autofocus onfocus="this.value = this.value;">
 			</div>
 		</div>
     	<div class="form-group">
-			<label class="control-label col-sm-2">Maximum number of results:</label>
-			<div class="col-sm-10">
+			<label class="control-label col-sm-4">Maximum number of results:</label>
+			<div class="col-sm-7">
 				<input class="form-control" type="text" name="limit" value="25">
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="control-label col-sm-2">Search term:</label>
-			<div class="col-sm-10">
+			<label class="control-label col-sm-4">Search term:</label>
+			<div class="col-sm-7">
 				<input class="form-control" type="text" name="q">
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="control-label col-sm-2">Only show tweets by this user:</label>
-			<div class="col-sm-10">
+			<label class="control-label col-sm-4">Only show tweets by this user:</label>
+			<div class="col-sm-7">
 				<input class="form-control" type="text" name="username">
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="control-label col-sm-2">Only show tweets by users you follow:</label>
-			<div class="col-sm-10">
-				<input class="form-control" type="checkbox" name="following" value="following" checked>
+			<label class="control-label col-sm-4">Only show tweets by users you follow:</label>
+			<div class="col-sm-7">
+				<input type="checkbox" name="following" value="following" checked>
 			</div>
 		</div>
 		<div class="form-group">
-			<div class="col-sm-offset-2 col-sm-10">
+			<div class="col-sm-offset-4 col-sm-10">
 				<button type="submit" class="btn btn-default">Submit</button>
 			</div>
 		</div>
