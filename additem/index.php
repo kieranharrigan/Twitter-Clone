@@ -221,8 +221,11 @@ else:
 <div class="container">
     <form id="input" oninput="updateCount();" onsubmit="event.preventDefault(); passToAdd();" autocomplete="off" class="form-horizontal">
     	<div class="form-group">
-        	<textarea class="form-control" id="tweet" type="text" name="content" maxlength="140" rows="6" cols="50" style="resize:none" placeholder="Your tweet goes here" autofocus></textarea>
-        	Characters left: <span id="rem">140</span>
+    	    <label class="control-label col-sm-2"></label>
+			<div class="col-sm-10">
+        		<textarea class="form-control" id="tweet" type="text" name="content" maxlength="140" rows="6" cols="50" style="resize:none" placeholder="Your tweet goes here" autofocus></textarea>
+        		Characters left: <span id="rem">140</span>
+        	</div>
         </div>
         <div class="form-group">
         	<label class="control-label col-sm-2">Parent:</label>
