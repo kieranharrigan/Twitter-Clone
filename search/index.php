@@ -259,6 +259,9 @@ elseif ($_SESSION['username'] === NULL):
 	$response['error'] = 'You must be logged in before you can search tweets.';
 	$json = json_encode($response);
 	echo $json;
+
+	header("Location: /login");
+	die();
 else:
 ?>
 <html>

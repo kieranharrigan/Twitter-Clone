@@ -168,7 +168,7 @@ elseif ($_SESSION['username'] === NULL):
 	$json = json_encode($response);
 	echo $json;
 
-	header("Location: javascript://history.go(-1)");
+	header("Location: /login");
 	die();
 else:
 ?>
