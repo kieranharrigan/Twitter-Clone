@@ -84,7 +84,11 @@ else:
     	<div class="form-group">
 			<label class="control-label col-sm-2">Media:</label>
 			<div class="col-sm-10">
-        		<input class="form-control" type="file" name="content"><br>
+        		<label class="btn btn-primary" for="my-file-selector">
+    			<input id="my-file-selector" type="file" name="content" style="display:none;" onchange="$('#path').html($(this).val());">
+    			Browse
+				</label>
+				<span class='label label-info' id="path"></span>
         	</div>
         </div>
     	<div class="form-group">
@@ -99,4 +103,3 @@ else:
 <?php
 endif;
 ?>
-
