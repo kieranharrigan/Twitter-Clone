@@ -10,13 +10,12 @@ function passToAdd() {
 		url: "/login/index.php/",
 		type: "POST",
 		data: JSON.stringify(json),
-		dataType: "json",
 		success: function(reply) {
 			document.write(reply);
 
-			console.log();
+			var json = JSON.parse(reply);
 
-			if(reply.status.localeCompare("OK") == 0) {
+			if(json.status.localeCompare("OK") == 0) {
 				window.location.replace("/additem");
 			}
 			else {
