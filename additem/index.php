@@ -218,9 +218,10 @@ else:
   </div><!-- /.container-fluid -->
 </nav>
 
+<div class="container">
     <form id="input" oninput="updateCount();" onsubmit="event.preventDefault(); passToAdd();" autocomplete="off" class="form-horizontal">
     	<div class="form-group">
-        	<textarea class="form-control" id="tweet" type="text" name="content" maxlength="140" rows="6" cols="50" style="resize:none" autofocus></textarea>
+        	<textarea class="form-control" id="tweet" type="text" name="content" maxlength="140" rows="6" cols="50" style="resize:none" placeholder="Your tweet goes here" autofocus></textarea>
         	Characters left: <span id="rem">140</span>
         </div>
         <div class="form-group">
@@ -235,8 +236,13 @@ else:
         		<input class="form-control" type="text" name="media" placeholder="Enter media IDs (comma separated)">
         	</div>
         </div>
-        <input type="submit" value="submit">
+        <div class="form-group">
+			<div class="col-sm-offset-2 col-sm-10">
+				<button type="submit" class="btn btn-default">Submit</button>
+			</div>
+		</div>
     </form>
+ </div>
 
     <div id="result"></div>
 </body>
