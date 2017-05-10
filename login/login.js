@@ -10,7 +10,7 @@ function passToAdd() {
 		url: "/login/index.php/",
 		type: "POST",
 		data: JSON.stringify(json),
-		dataType: json,
+		dataType: "json",
 		success: function(reply) {
 			document.write(reply);
 
