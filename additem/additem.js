@@ -25,14 +25,6 @@ function passToAdd() {
 		data: JSON.stringify(json),
 		success: function(reply) {
 			document.write(reply);
-
-			var json = JSON.parse(reply);
-							console.log("HEY");
-
-			if(json.status.localeCompare("error") == 0) {
-				console.log("HI");
-				window.history.go(-1);
-			}
 		}
 	});
 }

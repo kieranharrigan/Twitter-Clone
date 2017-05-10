@@ -167,6 +167,9 @@ elseif ($_SESSION['username'] === NULL):
 	$response['error'] = 'You must be logged in before you can compose tweets.';
 	$json = json_encode($response);
 	echo $json;
+
+	header("Location: javascript://history.go(-1)");
+	die();
 else:
 ?>
 <html>
