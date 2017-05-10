@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 $fields = json_decode(file_get_contents('php://input'), true);
 $username = $fields['username'];
 $password = $fields['password'];
@@ -102,13 +104,17 @@ else:
 
       <ul class="nav navbar-nav navbar-right">
         <li class="active"><a href="/adduser">Create Account <span class="sr-only">(current)</span></a></li>
+		<?php if ($_SESSION['username'] !== NULL): ?>
         <li><a href="/login">Login</a></li>
+		<?php else: ?>
+	    <li><a href="/logout">Logout</a></li>
+	<?php endif;?>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
 
-	<form id="input" onsubmit="event.preventDefault(); passToAdd();" autocomplete="off">
+	<form id="input" onsubmit="event.preventDefault(); passToAdd();" autocomplete="off" class="form-horizontal">
 		Username: <input type="text" name="username" autofocus><br>
 		Password: <input type="text" name="password"><br>
                 Email: <input type="text" name="email"><br>
