@@ -12,4 +12,7 @@ $response = array("status" => $phrase);
 $json = json_encode($response);
 
 echo $json;
+
+header("Location: /login");
+die();
 ?>
