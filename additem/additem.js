@@ -29,7 +29,8 @@ function passToAdd() {
 			var json = JSON.parse(reply);
 
 			if(json.status.localeCompare("error") == 0) {
-				history.go(-1);
+				console.log("HI");
+				window.history.go(-1);
 			}
 		}
 	});
