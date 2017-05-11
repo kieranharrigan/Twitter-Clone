@@ -343,7 +343,10 @@ else:
 		<div class="form-group">
 			<label class="control-label col-sm-4">Only show tweets by users you follow:</label>
 			<div class="col-sm-7">
-				<input type="checkbox" name="following" value="following" checked>
+				<select class="form-control" name="following" value="following">
+    				<option value="true">True</option>
+    				<option Value="false">False</option>
+  				</select>
 			</div>
 		</div>
 		<div class="form-group">
