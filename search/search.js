@@ -3,12 +3,7 @@ function passToAdd() {
 	var json = {};
 
 	$.each(arr, function() {
-                if(this.name.localeCompare("following") === 0) {
-                    json[this.name] = true;
-                }
-                else {
-		    json[this.name] = this.value;
-                }
+		json[this.name] = this.value;
 	});
 
 	$.ajax({
