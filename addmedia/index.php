@@ -5,7 +5,7 @@ $filename = basename($_FILES["content"]["name"]);
 $content = '0x' . bin2hex(base64_encode(file_get_contents($_FILES["content"]["tmp_name"])));
 
 if (strcmp($filename, '') !== 0):
-	// $ips = array('192.168.1.40', '192.168.1.41', '192.168.1.42', '192.168.1.43', '192.168.1.44', '192.168.1.46', '192.168.1.79', '192.168.1.66', '192.168.1.38', '192.168.1.80', '192.168.1.22', '192.168.1.25', '192.168.1.28');
+	// 	$ips = array('192.168.1.106', '192.168.1.107', '192.168.1.101', '192.168.1.111', '192.168.1.113', '192.168.1.108');
 	// $ip = array_rand($ips, 1);
 
 	// $cluster = Cassandra::cluster()->withContactPoints($ips[$ip])->build();
