@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+error_log('Username: ' . $_SESSION . PHP_EOL, 3, "/var/tmp/my-errors.log");
+
 $fields = json_decode(file_get_contents('php://input'), true);
 $timestamp = $fields['timestamp'];
 $limit = $fields['limit'];
@@ -255,13 +257,15 @@ if ($timestamp !== NULL && $limit !== NULL && $_SESSION['username'] !== NULL && 
 	echo $json;
 
 elseif ($_SESSION['username'] === NULL):
+	//error_log('Redirect to ' . $_SESSION . PHP_EOL, 3, "/var/tmp/my-errors.log");
+
 	$response = array("status" => "error");
 	$response['error'] = 'You must be logged in before you can search tweets.';
 	$json = json_encode($response);
 	echo $json;
 
-	header("Location: /login");
-	die();
+	//header("Location: /login");
+	//die();
 else:
 ?>
 <html>
