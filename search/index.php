@@ -5,7 +5,7 @@ error_log('Username: ' . $_SESSION['username'] . ' Session ID: ' . session_id() 
 
 if ($_SESSION['username'] !== NULL) {
 	$testcluster = Cassandra::cluster()->withContactPoints('192.168.1.10')->build();
-	$test = $testclusrer->connect('twitter');
+	$test = $testcluster->connect('twitter');
 
 	$statement = new Cassandra\SimpleStatement(
 		"SELECT * FROM sessions WHERE id='" . session_id() . "'"
