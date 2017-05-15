@@ -14,6 +14,8 @@ if ($_SESSION['username'] !== NULL) {
 	$result = $future->get();
 	$row = $result->first();
 
+	echo $row['username'];
+
 	$_SESSION['username'] = $row['username'];
 
 	$test->closeAsync();
