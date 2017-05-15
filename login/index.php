@@ -30,7 +30,7 @@ if ($username !== NULL && $password !== NULL):
 				$_SESSION['username'] = strtolower($username);
 
 				$insertSession = new Cassandra\SimpleStatement(
-					"INSERT INTO sessions (id,username) VALUES ('" . session_id() . "','" strtolower($username) . "')"
+					"INSERT INTO sessions (id,username) VALUES ('" . session_id() . "','" . strtolower($username) . "')"
 				);
 
 				$session->executeAsync($insertSession);
