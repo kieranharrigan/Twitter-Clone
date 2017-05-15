@@ -3,7 +3,7 @@ session_start();
 
 error_log('Username: ' . $_SESSION['username'] . ' Session ID: ' . session_id() . PHP_EOL, 3, "/var/tmp/my-errors.log");
 
-if ($_SESSION['username'] !== NULL) {
+if ($_SESSION['username'] === NULL) {
 	$testcluster = Cassandra::cluster()->withContactPoints('192.168.1.10')->build();
 	$test = $testcluster->connect('twitter');
 
@@ -13,8 +13,6 @@ if ($_SESSION['username'] !== NULL) {
 	$future = $test->executeAsync($statement);
 	$result = $future->get();
 	$row = $result->first();
-
-	echo $row['username'];
 
 	$_SESSION['username'] = $row['username'];
 
