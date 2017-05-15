@@ -1,7 +1,10 @@
 <?php
+
+error_log('Session ID: ' . session_id(), 3, "/var/tmp/my-errors.log");
+
 session_start();
 
-error_log('Username: ' . $_SESSION['username'] . ' Session ID: ' . session_id() . PHP_EOL, 3, "/var/tmp/my-errors.log");
+error_log(' Username: ' . $_SESSION['username'] . PHP_EOL, 3, "/var/tmp/my-errors.log");
 
 $fields = json_decode(file_get_contents('php://input'), true);
 $timestamp = $fields['timestamp'];
