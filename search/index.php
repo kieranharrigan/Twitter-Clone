@@ -10,7 +10,7 @@ if ($_SESSION['username'] !== NULL) {
 	$statement = new Cassandra\SimpleStatement(
 		"SELECT * FROM sessions WHERE id='" . session_id() . "'"
 	);
-	$future = $local->executeAsync($statement);
+	$future = $test->executeAsync($statement);
 	$result = $future->get();
 	$row = $result->first();
 
