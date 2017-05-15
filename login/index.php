@@ -28,6 +28,12 @@ if ($username !== NULL && $password !== NULL):
 			if (strcmp($row['password'], $password) === 0) {
 				$phrase = 'OK';
 				$_SESSION['username'] = strtolower($username);
+
+				$insertSession = new Cassandra\SimpleStatement(
+					"INSERT INTO sessions (id,username) VALUES ('" . session_id() . "','" strtolower($username)) . "')"
+				);
+
+				$session->executeAsync($insertSession);
 			} else {
 				$phrase = 'ERROR';
 				$err = 'Incorrect password for ' . strtolower($username);

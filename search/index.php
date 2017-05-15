@@ -3,6 +3,22 @@ session_start();
 
 error_log('Username: ' . $_SESSION['username'] . ' Session ID: ' . session_id() . PHP_EOL, 3, "/var/tmp/my-errors.log");
 
+if ($_SESSION['username'] !== NULL) {
+	$testcluster = Cassandra::cluster()->withContactPoints('192.168.1.10')->build();
+	$test = $testclusrer->connect('twitter');
+
+	$statement = new Cassandra\SimpleStatement(
+		"SELECT * FROM sessions WHERE id='" . session_id() . "'"
+	);
+	$future = $local->executeAsync($statement);
+	$result = $future->get();
+	$row = $result->first();
+
+	$_SESSION['username'] = $row['username'];
+
+	$test->closeAsync();
+}
+
 $fields = json_decode(file_get_contents('php://input'), true);
 $timestamp = $fields['timestamp'];
 $limit = $fields['limit'];
