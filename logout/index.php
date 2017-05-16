@@ -13,6 +13,6 @@ $json = json_encode($response);
 
 echo $json;
 
-header("Location: /login");
-die();
+//header("Location: /login");
+//die();
 ?>
