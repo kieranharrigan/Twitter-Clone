@@ -5,6 +5,22 @@ $fields = json_decode(file_get_contents('php://input'), true);
 $tofollow = $fields['username'];
 $follow = $fields['follow'];
 
+if ($_SESSION['username'] === NULL) {
+	$testcluster = Cassandra::cluster()->withContactPoints('192.168.1.10')->build();
+	$test = $testcluster->connect('twitter');
+
+	$statement = new Cassandra\SimpleStatement(
+		"SELECT * FROM sessions WHERE id='" . session_id() . "'"
+	);
+	$future = $test->executeAsync($statement);
+	$result = $future->get();
+	$row = $result->first();
+
+	$_SESSION['username'] = $row['username'];
+
+	$test->closeAsync();
+}
+
 if ($follow === NULL) {
 	$follow = true;
 }
